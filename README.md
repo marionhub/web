@@ -1,7 +1,9 @@
-# mysite
-testing a personal website
+# Scott Marion 
 
-test weather link: www.windy.com
+compiling a personal website
 
 link to full weather site: [my weather page](SRM_weather7.html)
+
+trial Google photos album links:
+
 
