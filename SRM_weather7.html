@@ -1,0 +1,640 @@
+<html>
+<style>
+
+body {background-color: #4f88dd;
+      color: darkblue;
+      font-family: Times, "Nimbus Sans L", "Liberation Sans", Arial, sans-serif;
+}
+
+a {
+    float: left;
+    display: block;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 7px 8px;
+    text-decoration: none;
+    font-family: Arial;
+}
+
+a:hover {
+    background-color: #ddd;
+    color: black;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* --------------------- header ---------------------------------- */
+#menu {overflow: hidden;  
+		position: fixed;
+  		top: 0;
+  		z-index: 3;
+  		width: 100%;
+  		background-color: #4f88dd;}
+
+#tabholder {
+    overflow: hidden; 
+}
+
+#tabholder button {
+    background-color: inherit;
+    color: white;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 8px 12px;
+    margin: 5px 7px;
+    transition: 0.3s;
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+#tabholder button:hover {
+    background-color: #2563c1;
+}
+
+#tabholder button.active {
+    background-color:  #3e7dda;
+    color: white;
+    box-shadow: 6px 6px 6px 0px rgba(0,0,0,0.2);
+}
+
+.tabcontent {
+    display: none;
+    padding: 6px 12px;
+    -webkit-animation: fadeEffect 1s;
+    animation: fadeEffect 1s;
+}
+
+/* --------------------- links ---------------------------------- */
+table#t1 {width: 1100px;}
+table#t1 td {text-align: center;}
+table#t1 a {float: none;}
+table#t1 img {width: 200px;}
+
+/* --------------------- passage ---------------------------------- */
+#passage img {width: 350px;}
+
+/* --------------------- buoys ---------------------------------- */
+#buoys td {text-align:center; width:50px;}
+#buoys a {display: block; float:none; font-size: 16px;padding: 5px 0px;}
+
+.fullsize {
+    display: inline-block;
+	z-index: 1;
+	cursor:pointer;
+}
+
+.fullsize-content {
+    display: none;
+    position: fixed;
+    top: 50%;
+  	left: 50%;
+  	padding: 30px;
+  	border: 1px solid black;
+  	transform: translate(-50%, -50%);
+    background-color: #3e7dda;
+    min-width: 600px;
+    box-shadow: 17px 20px 85px 1px rgba(0,0,0,0.88);
+    z-index: 2;
+}
+.fullsize img {width: 125px; height: 100px;}
+.fullsize-content img {width: 600px; height: 480px;}
+
+.fullsize:active .fullsize-content {
+    display: block;
+}
+
+/* --------------------- page selector ---------------------------------- */
+#links {display: block; margin-top: 90px;}
+#passage {display: none; margin-top: 90px;}
+#buoys {display: none; margin-top: 90px;}
+
+</style>
+
+
+<!-- ------------- HEADER ---------------------------------------------- -->
+<head> <title>SRM weather compilation</title> </head>
+<body>
+<div id="menu">
+<table>
+  <td><p style="font-size:36px; width: 430px; font-family: Times;">Oregon Ocean conditions</p>
+  <td>
+	<div id="tabholder">
+	  <button id="thisone" class="tablinks" onclick="openDiv(event, 'links')">Links</button> 
+	  <button class="tablinks" onclick="openDiv(event, 'passage')">Forecast graphics</button>
+	  <button class="tablinks" onclick="openDiv(event, 'buoys')">Real-time buoy data</button>
+	</div>
+  
+</table>
+<hr>
+</div>
+
+<!-- ------------- LINKS ---------------------------------------------- -->
+<div id="links" class="tabcontent">
+<table width="909" border="0">
+<tr>
+  <th align="left">Marine zone forecasts:</th>
+  <th align="left">Wave forecasts:</th>
+  <th align="left">Currents, O<sub>2</sub>, Temp:</th>
+  <th align="left">other links:</th>
+</tr>
+
+<tr>
+  <td>
+    <table width="250" border="0">
+      <tr><td><a href="http://marine.weather.gov/MapClick.php?zoneid=PZZ255#detailed-forecast-body"> Cascade-Florence 0-10 nm</a></tr>
+      <tr><td><a href="http://marine.weather.gov/MapClick.php?zoneid=PZZ275#detailed-forecast-body"> Cascade-Florence 10-60 nm</a></tr>
+      <tr><td><a href="http://marine.weather.gov/MapClick.php?zoneid=PZZ356#detailed-forecast-body"> Blanco-CA 0-10 nm</a></tr>
+      <tr><td><a href="http://marine.weather.gov/MapClick.php?zoneid=PZZ376#detailed-forecast-body"> Blanco-CA 10-60 nm</a></tr>
+      <tr><td><a href="http://www.wrh.noaa.gov/total_forecast/getprod.php?new&wfo=pqr&sid=PQR&pil=CWF">Full Marine Forecast</a></tr>
+    </table>
+  <td>
+    <table width="200" border="0">
+    <tr><td><a href="https://www.windy.com/44.911/-124.094/waves?waves,42.553,-130.693,4,m:eT0acIl">Windy: ECMWF model</a></tr>
+    <tr><td><a href="http://cdip.ucsd.edu/themes/cdip?pb=1&d2=p70:s:139:st:1">CDIP: Umpqua buoy</a></tr>
+    <tr><td><a href="http://www.surfline.com/surf-forecasts/spot/newport_5073/">Surfline</a></tr>
+    <tr><td><a href="http://magicseaweed.com/Newport-Surf-Report/318/">Magic Seaweed</a></tr>
+    <tr><td><a href="http://www.oregonsurfcheck.com/">Oregon Surf Check</a></tr>  
+    </table>
+  <td>
+    <table width="200" border="0">
+    <tr><td><a href="http://nvs.nanoos.org/Explorer?action=overlay:osu_roms_sst">OSU ROMS (NANOOS)</a></tr>
+	<tr><td><a href="http://nvs.nanoos.org/HFradar">OSU HF Radar: currents</a></tr>   
+	<tr><td><a href="http://nvs.nanoos.org/Explorer?action=overlay:liveocean_o2">LiveOcean: O<sub>2</sub></a></tr>
+    <tr><td><a href="http://nvs.nanoos.org/Explorer?action=overlay:liveocean_temp">LiveOcean: Temp.</a></tr>
+    <tr><td>
+   </table>
+  <td>
+    <table width="200" border="0">
+    <tr><td><a href="https://www.wunderground.com/forecast/us/or/newport/97365?cm_ven=localwx_10day"> Weather Underground</a></tr>
+    <tr><td><a href="http://cil-www.oce.orst.edu:8082/locations/3788.html"> Tides- Yaquina</a></tr>
+    <tr><td><a href="https://tidesandcurrents.noaa.gov/stationhome.html?id=9435380"> HMSC dock</a></tr>
+    <tr><td><a href="https://worldview.earthdata.nasa.gov/?v=-132.30234627832183,40.02339448592444,-115.52901751770767,47.90773261428606&t=2020-09-15-T14%3A59%3A16Z&l=Reference_Labels,Reference_Features,Coastlines,VIIRS_NOAA20_CorrectedReflectance_TrueColor,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Aqua_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor(hidden)"
+ID="demo2"> Modis satellite</a></tr>
+    <tr><td><a href="http://damp.coas.oregonstate.edu/windstress/2020.html"> Upwelling wind stress </a></tr>
+    </table>
+</table>
+<br>
+<hr>
+<br>
+
+<table id="t1">
+  <th>Yaquina bar</th>
+  <th>Yaquina Head</th>
+  <th>Depoe Bay bar</th>
+  <th>Lincoln City</th>
+<tr>
+  <td><a href="http://www.wrh.noaa.gov/images/mfr/camera/Yaquin.jpg"><img src="http://www.wrh.noaa.gov/images/mfr/camera/Yaquin.jpg"></a>
+  <td><a href="http://cil-www.oce.orst.edu/agate.html"><img src="http://cil-www.oce.orst.edu/yhead/latest.c0.snap.jpg"></a>
+  <td><a href="http://www.wrh.noaa.gov/images/mfr/camera/DepoeB.jpg"><img src="http://www.wrh.noaa.gov/images/mfr/camera/DepoeB.jpg"></a>
+  <td><a href="http://www.lcsurfshop.com/webcam32.jpg"><img src="http://www.lcsurfshop.com/webcam32.jpg"></a>
+</tr>
+<tr height=30px;></tr>
+<tr><td><p>Stonewall buoy cam:</p></tr>
+<tr>
+	<td colspan="4"><a href="http://www.ndbc.noaa.gov/buoycam.php?station=46050">
+	<img src=http://www.ndbc.noaa.gov/buoycam.php?station=46050 style="width: 1000px;"></a>
+	</tr>
+</table>
+
+
+
+<hr>
+<br>
+<table>
+	<tr> 
+	<td width=35px;>
+	<td>
+	<a href="http://cdip.ucsd.edu/themes/media/images/plots/buoy_ww3.gd?stn=139&stream=p1&pub=public&tz=PST&units=english">
+		<img src=http://cdip.ucsd.edu/themes/media/images/plots/buoy_ww3.gd?stn=139&stream=p1&pub=public&tz=PST&units=english >
+		</a>
+	</tr>
+</table>
+</div>
+
+<!-- ------------- PASSAGE WEATHER GRAPHICS --------------------------------- -->
+<div id="passage" class="tabcontent">
+<p>24 hr interval graphics from <a style="display: inline; float:none;" href="http://passageweather.com/">Passage Weather</a>  (Wavewatch 3 model; GFS-based.)</p>
+
+<table width="1209" border="0">
+<th>WIND</th>
+<th>WAVES</th>
+<th>N. Pacific waves</th>
+
+<tr>
+<td>
+<table>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/000.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/024.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/048.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/072.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/096.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/120.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/144.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/wind/168.png"> </td></tr>
+</table>
+</td>
+<td>
+<table>
+<tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/000.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/024.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/048.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/072.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/096.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/120.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/144.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/usawest/waves/168.png"> </td></tr>
+</tr>
+</table>
+</td>
+<td>
+<table>
+<tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/000.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/024.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/048.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/072.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/096.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/120.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/144.png"> </td></tr>
+ <tr><td><img src="http://passageweather.com/maps/npacific/waves/168.png"> </td></tr>
+</tr>
+</table>
+</td>
+
+</table>
+<hr>
+<br>
+
+<p>24 hr interval graphics from NOAA. Same WW3 model. See <a style="display: inline; float:none;" href="https://polar.ncep.noaa.gov/waves/viewer.shtml?-multi_1-latest-hs-NE_pacific-">7-day animation</a></p>
+<table>
+<tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f003h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f024h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f048h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f072h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f096h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f120h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f144h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f168h.png"> </td></tr>
+ <tr><td><img src="https://polar.ncep.noaa.gov/waves/WEB/multi_1.latest_run/plots/NE_pacific.hs.f180h.png"> </td></tr>
+</tr>
+</table>
+
+<br>
+<hr>
+<br>
+</div>
+
+<!-- ------------- BUOY DATA  ---------------------------------------------- -->
+<div id="buoys" class="tabcontent">
+<table id="buoytbl" width="1100" border="0">
+
+<!-- ------------- COLUMN TITLES & LINKS ---------------------------------------------- -->
+  <tr style="vertical-align: top;">
+    <td width="150"> 
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=46029">Columbia River <br>offshore</a>
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=46243">Clatsop Spit</a>
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=46050">Stonewall Bank</a> 
+    <td> <a href="http://nvs.nanoos.org/Explorer">OOI Shelf Mooring</a> 
+    <td> <a href="http://nvs.nanoos.org/Explorer">OOI Inshore Mooring</a> 
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=sbeo3">Yaquina<br> OSU dock</a>
+    <td> <a href="http://nvs.nanoos.org/Explorer">OOI Offshore Mooring</a> 
+    <td> <a href="http://cdip.ucsd.edu/themes/cdip?pb=1&d2=p70&u3=s:139:st:1">Umpqua <br> offshore</a> 
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=46128">Coos Bay offshore</a> 
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=46015">Port Orford offshore</a> 
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=poro3">Port Orford dock</a> 
+    <td> <a href="http://www.ndbc.noaa.gov/station_page.php?station=46027">Crescent City, CA</a>
+  </tr>
+  <tr style="vertical-align: top;">
+    <td width="150"> 
+    <td> <p>NDBC 46029<br>20 miles out</p>
+    <td> <p>NDBC 46243<br>5 miles out</p>    
+    <td> <p>NDBC 46050<br>20 miles out</p>
+    <td> <p>CE02SHSM<br> 12 miles out</p>    
+    <td> <p>CEO1ISSM <br> 1 mile out</p>
+    <td> <p>NDBC SBEO3</p>
+    <td> <p>CE04OSSM <br> 42 miles out</p>
+    <td> <p>CDIP buoy 139<br>18 miles out</p>  
+    <td> <p>NDBC 46128<br> 7 miles out</p>
+    <td> <p>NDBC 46015<br> 15 miles out</p>
+    <td> <p>NDBC PORO3</p>
+    <td> <p>NDBC 46027</p>
+  </tr>
+
+<!-- ------------- WAVES ---------------------------------------------- -->
+  <tr>
+  <td> <p style="font-size:16px;">Wave Ht</p>
+<!-- Columbia -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46029&amp;meas=sght&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Significant Wave Height at 46029">
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46029&amp;meas=sght&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Significant Wave Height at 46029">
+	 </div></div>
+<!-- Clatsop -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46243&amp;meas=sght&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Significant Wave Height at 46243">
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46243&amp;meas=sght&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Significant Wave Height at 46243">
+	 </div></div>
+<!-- Stonewall -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46050&amp;meas=sght&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Significant Wave Height at 46050">
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46050&amp;meas=sght&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Significant Wave Height at 46050">
+	 </div></div>
+<!-- OOI shelf -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_WaveHght&range=7d&plot_size=large&rand=50410">
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_WaveHght&range=7d&plot_size=large&rand=50410">
+	 </div></div>
+    <td>
+    <td>
+<!-- OOI offshore -->
+    <td>  <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_WaveHght&range=7d&plot_size=large&rand=41809">
+    	  <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_WaveHght&range=7d&plot_size=large&rand=41809">
+          </div></div>
+<!-- Umpqua -->
+    <td>  <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=CDIP_46229&var_id=H1_WaveHght&range=7d&plot_size=large&rand=41809">
+    	  <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=CDIP_46229&var_id=H1_WaveHght&range=7d&plot_size=large&rand=41809">
+          </div></div>
+    <td>
+<!-- Port Orford -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46015&amp;meas=sght&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Significant Wave Height at 46015"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_wave.php?station=46015&amp;meas=sght&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Significant Wave Height at 46015">
+	 </div></div>
+    <td>
+<!-- Crescent City -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=H1_WaveHght&range=7d&plot_size=large&rand=28254"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=H1_WaveHght&range=7d&plot_size=large&rand=28254">
+	 </div></div>
+  </tr>
+
+<!-- ------------- WIND ---------------------------------------------- -->
+  <tr>
+  <td> <p style="font-size:16px;">Wind</p>
+<!-- Columbia -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_wind_pres.php?station=46029&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind Speed, Wind Gust and Atmospheric Pressure at 46029">
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_wind_pres.php?station=46029&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind Speed, Wind Gust and Atmospheric Pressure at 46029">    
+	 </div></div>
+    <td>
+<!-- Stonewall -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_wind_pres.php?station=46050&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind Speed, Wind Gust and Atmospheric Pressure at 46050">
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_wind_pres.php?station=46050&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind Speed, Wind Gust and Atmospheric Pressure at 46050">    
+	 </div></div>
+<!-- OOI shelf-->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=79727">
+    	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=79727">
+	 </div></div>
+    <td>
+<!-- Yaquina -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_wind_pres.php?station=nwpo3&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind Speed, Wind Gust and Atmospheric Pressure at NWPO3">
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_wind_pres.php?station=nwpo3&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind Speed, Wind Gust and Atmospheric Pressure at NWPO3" >
+	 </div></div>    
+<!-- OOI offshore -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=79727">
+    	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=79727">
+	 </div></div>
+    <td>
+<!-- Coos offshore -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OSU_CB06&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=47074"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OSU_CB06&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=47074">
+	 </div></div>
+<!-- Port Orford -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov//plot_wind_pres.php?station=46015&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind at 46015"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov//plot_wind_pres.php?station=46015&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind at 46015" >
+	 </div></div>
+<!-- Port Orford dock -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov//plot_wind_pres.php?station=poro3&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind at PORO3"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov//plot_wind_pres.php?station=poro3&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Wind at PORO3" >
+	 </div></div>
+<!-- Crescent City -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=14204"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=A1_WindSpeed&range=7d&plot_size=large&rand=14204" >
+	 </div></div>
+  </tr>
+<!-- ------------- WAVE PERIOD ---------------------------------------------- -->
+  <tr>
+    <td> <p style="font-size:16px;">Wave Period</p>
+<!-- Columbia -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46029&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46029"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46029&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46029">
+	 </div></div>
+<!-- Clatsop -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46243&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46243"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46243&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46243">
+	 </div></div>
+<!-- Stonewall -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46050&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46050"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46050&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46050">
+	 </div></div>
+<!-- OOI shelf -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=23180"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=23180">
+	 </div></div>
+    <td>
+    <td>
+<!-- OOI offshore -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=23180"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=23180">
+	 </div></div>
+
+<!-- Umpqua -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=CDIP_46229&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=63421"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=CDIP_46229&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=63421">
+	 </div></div>
+    <td>
+<!-- Port Orford -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46015&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46015"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46015&amp;meas=dmpd&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Dominant Period at 46015">
+	 </div></div>
+    <td>
+<!-- Crescent City -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=17662"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=H1_DomWavePrd&range=7d&plot_size=large&rand=17662">
+	 </div></div>
+  </tr>
+
+<!-- ------------- TEMPERATURE ---------------------------------------------- -->
+  <tr>
+    <td> <p style="font-size:16px;">Temp</p>
+<!-- Columbia -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46029&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46029"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46029&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46029"> 
+	 </div></div>
+<!-- Clatsop -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46243&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46243"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46243&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46243"> 
+	 </div></div>
+<!-- Stonewall -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46050&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46050"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46050&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46050"> 
+	 </div></div>
+<!-- OOI shelf -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=6608"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=6608">
+	 </div></div>
+<!-- OOI inshore-->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE01ISSM&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=49870"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE01ISSM&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=49870">
+	 </div></div>
+<!-- Yaquina -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=sbeo3&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at SBEO3"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=sbeo3&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at SBEO3"> 
+	 </div></div>
+<!-- OOI offshore-->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=49870"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=49870">
+	 </div></div>
+<!-- Umpqua-->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=CDIP_46229&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=71642"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=CDIP_46229&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=71642">
+	 </div></div>
+<!-- Coos offshore -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46128&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46128"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46128&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46128">
+	 </div></div>
+<!-- Port Orford buoy -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=46015&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46015"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=46015&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at 46015">
+	 </div></div>
+<!-- Port Orford dock -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_met.php?station=poro3&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at PORO3"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_met.php?station=poro3&amp;meas=wtmp&amp;uom=E&amp;time_diff=-7&amp;time_label=PDT" alt="5-day plot - Water Temperature at PORO3">
+	 </div></div>
+<!-- Crescent City -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=25929"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=NDBC_46027&var_id=H1_WaterTemp&range=7d&plot_size=large&rand=25929">
+	 </div></div>
+  </tr>
+
+<!-- ------------- SALINITY ---------------------------------------------- -->
+  <tr>
+    <td> <p style="font-size:16px;">Salinity</p>
+    <td>
+    <td>
+    <td>
+<!-- OOI shelf -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_Salinity&range=7d&plot_size=large&rand=777"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_Salinity&range=7d&plot_size=large&rand=777">
+	 </div></div>
+<!-- OOI inshore -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE01ISSM&var_id=H1_Salinity&range=7d&plot_size=large&rand=46011"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE01ISSM&var_id=H1_Salinity&range=7d&plot_size=large&rand=46011">
+	 </div></div>
+    <td>
+<!-- OOI offshore-->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_Salinity&range=7d&plot_size=large&rand=63937"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_Salinity&range=7d&plot_size=large&rand=63937">
+	 </div></div>
+    <td>
+<!-- Coos offshore -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/plot_ocean.php?station=46128&amp;meas=salt&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Salinity at 46128"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/plot_ocean.php?station=46128&amp;meas=salt&amp;uom=E&amp;time_diff=-8&amp;time_label=PST" alt="5-day plot - Salinity at 46128">
+	 </div></div>
+    <td>
+  </tr>
+
+<!-- ------------- OXYGEN ---------------------------------------------- -->
+  <tr>
+    <td> <p style="font-size:16px;">O<sub>2</sub></p>
+    <td>
+    <td>
+    <td>
+<!-- OOI shelf -->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_Oxygen&range=60d&plot_size=large&rand=4552"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE02SHSM&var_id=H1_Oxygen&range=60d&plot_size=large&rand=4552"> </a> 
+	 </div></div>
+<!-- OOI inshore-->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE01ISSM&var_id=H1_Oxygen&range=7d&plot_size=large&rand=4556"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE01ISSM&var_id=H1_Oxygen&range=7d&plot_size=large&rand=4556"> </a> 
+	 </div></div>
+    <td>
+<!-- OOI offshore-->
+    <td> <div class="fullsize">        <img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_Oxygen&range=60d&plot_size=large&rand=8412"> 
+	 <div class="fullsize-content"><img src="http://nvs.nanoos.org/services/get_siso-obs_plot.php?siso_id=OOI_CE04OSSM&var_id=H1_Oxygen&range=60d&plot_size=large&rand=8412"> </a> 
+	 </div></div>
+    
+    <td>
+    <td>
+  </tr>
+
+<!-- ------------- WAVE SPECTRUM ---------------------------------------------- -->
+  <tr>
+    <td> <p style="font-size:16px;">Wave Spectrum</p>
+<!-- Columbia -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/spec_plot.php?station=46029" alt="1-hour plot - Spectral Density at 46029"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/spec_plot.php?station=46029" alt="1-hour plot - Spectral Density at 46029">
+	 </div></div>
+<!-- Clatsop -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/spec_plot.php?station=46243" alt="1-hour plot - Spectral Density at 46243"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/spec_plot.php?station=46243" alt="1-hour plot - Spectral Density at 46243">
+	 </div></div>
+<!-- Stonewall -->
+    <td> <div class="fullsize">        <img src="http://www.ndbc.noaa.gov/spec_plot.php?station=46050" alt="1-hour plot - Spectral Density at 46050"> 
+	 <div class="fullsize-content"><img src="http://www.ndbc.noaa.gov/spec_plot.php?station=46050" alt="1-hour plot - Spectral Density at 46050">
+	 </div></div>
+    <td>
+    <td>
+    <td>
+    <td>
+<!-- Umpqua -->
+    <td> <div class="fullsize">        <img  src="http://cdip.ucsd.edu/plots/polar_combo.gd?stn=139">
+	 <div class="fullsize-content"><img  src="http://cdip.ucsd.edu/plots/polar_combo.gd?stn=139">
+	 </div></div>
+    <td>
+    <td>
+    <td>
+  </tr>
+<!-- -------------  ---------------------------------------------- -->
+</table>
+<hr>
+<br>
+</div>
+
+<!-- ------------- SCRIPT ---------------------------------------------- -->
+<script>
+document.getElementById("thisone").className += " active"; /* sets the default active button */
+function openDiv(evt, divName) {
+    var i, tabcontent, tablinks;	
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    	}
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    	}
+    document.getElementById(divName).style.display = "block";
+    evt.currentTarget.className += " active";
+}
+
+function addZero(x) {
+    if (x < 10) {x = "0" + x;}
+    return x;
+	}
+function hrtoUTC(y) {
+	if (y < 16) {y = 8 + y;} else {y = y + 8 - 24;}
+	return y;
+	}
+function dytoUTC(z) {
+	if (d.getHours() > 15) {z = z + 1;}
+	return z;
+	}
+
+    var d = new Date();
+    var y = d.getFullYear();
+    var m = addZero(d.getMonth()+1);
+    var dy = addZero(dytoUTC(d.getDate()));
+    var h = addZero(hrtoUTC(d.getHours())-1);
+    var mn = addZero(d.getMinutes());
+	var lnk = "http://cdip.ucsd.edu/themes/media/images/plots/polar_combo.gd?tz=UTC&units=english&spname=sp13901";
+	var all = lnk.concat(y, m, dy, h, mn);
+	
+	document.getElementById("demo").src = document.getElementById("demo").src + all;
+	document.getElementById("demo1").src = document.getElementById("demo1").src + all;
+
+var lnk1 = "https://worldview.earthdata.nasa.gov/?p=geographic&l=MODIS_Aqua_CorrectedReflectance_TrueColor,VIIRS_SNPP_CorrectedReflectance_TrueColor(hidden),MODIS_Terra_CorrectedReflectance_TrueColor,Reference_Labels,Reference_Features(hidden),Coastlines,MODIS_Fires_Terra(hidden)&t="
+var lnk2 = "&z=3&v=-138.26101648484928,37.4774058924517,-112.94851648484928,51.0125621424517&ab=off&as=2012-03-25&ae=2012-05-05&av=2&al=false"	
+var all1 = lnk1.concat(y,"-",m,"-",d.getDate(), lnk2);
+document.getElementById("demo2").href = all1;
+
+
+</script>
+</body>
+</html>
