@@ -1,4 +1,6 @@
-[Scott's custom weather dashboard](SRM_weather7.html)
+[Scott's custom weather dashboard](docs/SRM_weather7.html)
+
+[Scott's R code reference](docs/SRM_code.html)
 
 Google photos album links:
 
