@@ -6,7 +6,7 @@ Google photos album links:
 
 | Arrival | 
 |:---:|
-| [![mythumb](images/introducing-alex-galen-marion_50578793228_o.jpg "Arrival 2020")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |
+| [![mythumb](images/introducing-alex-galen-marion_50578793228_o.jpg "Arrival 2020")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9){: .shadow} |
 
 
 | [April](https://photos.app.goo.gl/6VsoFErA5ABAhpYe9)  |   [May](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) | [May](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) | [May](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) | [May](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) |    |
