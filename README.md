@@ -1,3 +1,8 @@
+<style>
+  .footer {
+    display: none;
+  }
+</style>
 
 [Scott's custom weather dashboard](SRM_weather7.html)
 
@@ -14,8 +19,3 @@ Google photos album links:
 |      | May |  June |     |     |
 |      |     |     |     |     |
 
-<style>
-  .footer {
-    display: none;
-  }
-</style>
