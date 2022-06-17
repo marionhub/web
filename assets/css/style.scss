@@ -7,7 +7,9 @@ a {
 }
 a:hover {
   color: #000011;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
+
 footer {
     display: none;
   }
@@ -17,3 +19,4 @@ table, td, th {
 }
 
 img[alt=mythumb] { width: 100px; }
+
