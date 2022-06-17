@@ -1,0 +1,1731 @@
+---
+title: "SRM R code reference"
+output: 
+  html_document: 
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+
+    number_sections: yes
+    highlight: tango
+    css: style.css
+---
+
+<style>
+
+div.main-container{
+  max-width: 1600px;
+  padding-left: 250px;
+  }
+
+div.tocify{
+  left: 20px;
+  width: 350px;
+  max-width: 350px;
+}
+
+</style>
+
+# <a name="tech"/>**Useful techniques**  
+```{r eval=F}
+str() # tells you the structure of any object.
+dput() # allows you to dump an object in the form of R code. E.G. dput(levels(iris$Species)) GIVES YOU c("setosa", "versicolor", "virginica")
+head() and tail() # to get the first and last parts of a dataframe
+with()    # sets up an environment within which the R expression is evaluated. 
+          # EG: with(df, A + B)
+within()  # does the same thing but allows you to modify the data object used to create the environment.
+          # EG: df <- within(df, C <- rpois(10, lambda = 2))
+expand.grid() # Create a Data Frame from All Combinations of Factors
+transform() # create new variables (or multiples) in dataframes without using assignments
+            # EG: transform(airquality, new = -Ozone, Temp = (Temp-32)/1.8)
+subset() # subset(airquality, Temp > 80, select = c(Ozone, Temp)) ## BEWARE THIS GRABS NA RECORDS ALONG WITH THE DESIRED TARGET IF USING "!= TARGET"
+ave() # average subsets of the same factor levels, for inclusion as column with raw data
+stopfifnot(!bad.condition) # for careful code; evaluates conditions
+traceback() # for debugging; It will print a trace of the stack.
+browser() # included in the body of a function. pauses the execution of the current expression and allows access to the R interpreter.
+sapply() # ANONYMOUS FUNCTIONS E.G.: sapply(rnorm(100, 0, 1), function(x) {round(x, 2)})
+cut() # divides the range of x into intervals and codes the values in x according to which interval they fall.
+dset[complete.cases(dset),] # Return a logical vector indicating which cases are complete, i.e., have no missing values
+na.omit(dset) #  returns the object with incomplete cases removed
+match # returns a vector of the positions of (first) matches of its first argument in its second.
+      # e.g. din[match(minutes$minute, din$minute),]
+split() # split by a column (or columns) of the data, or by anything else you want
+        # e.g. mt_list = split(mtcars, f = mtcars$cyl)
+        # This gives a list of three data frames, one for each value of cyl
+replicate #
+          # sim_list = replicate(n = 10, expr = {data.frame(x = rnorm(50), y = rnorm(50))}, simplify = F)
+get # df_list = lapply(ls(pattern = "df[0-9]"), get)
+ls()[ls()!="mydata"]
+
+## two approaches for getting a specific object out of a bulk stored file:
+## load into local environments
+  e1 <- new.env()
+  e2 <- new.env()
+  load("data_out/raw_data/CascadeHead/video data entry", env=e1)
+  load("data_out/raw_data/Arago/video data entry", env=e2)
+  fish <- rbind(e1$fish, e2$fish) %>% mutate(DiveTran = factor(as.character(DiveTran)))
+## or, attach/detach
+  attach("data_out/raw_data/video data entry QCd")
+  ti <- transect_info
+  detach() # this is a trick to avoid polluting the workspace with unneeded objects...
+
+## loading libraries
+pkgs <- c("tidyverse", "lubridate", "ggplot2") 
+lapply(pkgs, require, character.only = TRUE)
+```
+
+# <a name="pckg"/>**Packages**    
+```{r eval=F}
+foreach # alternate to loop construction; allows parallel operation for speed; returns a value
+sqldf # for interfacing w/ SQL, E.G. sqldf('SELECT product, revenue FROM sales \ WHERE country = "USA" \ AND product IN (1,2)')
+gplots # function 'plotmeans' for plotting means and s.d.
+  # 'textplot' for making a plot object out of some text
+  # e.g.: reg <- lm( Sepal.Length ~ Species, data=iris )
+	#       textplot( capture.output(summary(reg)), valign="top")
+```
+
+# <a name="dplyr"/>**DPLYR**   
+```{r, eval=F}
+dplyr # simplify data manipulation
+  tbl_df # creates table that simplifies printing
+  filter(flights, month == 1, day == 1) # or     filter(flights, month == 1 | day == 1)
+  slice(flights, 1:10) # extract rows by position
+  arrange(flights, year, month, day) # or arrange(flights, desc(year))
+  select(flights, year, month, day) # or    select(flights, year:day) # or   select(flights, -(year:day))
+  select(flights, tail_num = tailnum) # select AND rename variables 
+  select(flights, year, everything()) # re-order columns, with all others at the end
+    (or)
+    col <- c("carrier", "tailnum", "year", "month", "day")
+    select(flights, one_of(col), everything()) 
+  rename(flights, tail_num = tailnum) # just rename, retaining all other vars
+  distinct(select(flights, origin, dest)) # like unique
+  mutate(flights,
+      gain = arr_delay - dep_delay,
+      gain_per_hour = gain / (air_time / 60)) # mutate allows referring to columns just created; 
+                                              # or 'transmute' retains only new vars
+  summarise(flights,
+      delay = mean(dep_delay, na.rm = TRUE)) # collapses a data frame to a single row
+  slice_sample(dta, n=samplesize) # this is the recommended replacement for sample_n(); 
+                # if you don't explicitly write n=X, the second parameter will be taken to be the row number(s) to sample from, not n
+      # sample_n(flights, 10) # or sample_frac(flights, 0.01) # replace = TRUE to perform a bootstrap sample. 
+                        # weight argument available
+  
+  ## grouping
+  tmp <- group_by(flights, tailnum) 
+  tmp1 <- summarise(tmp,
+        count = n(),
+        dist = mean(distance, na.rm = TRUE))
+  daily <- group_by(flights, year, month, day) # multiple grouping variables
+  
+  ## other aggregate functions
+  destinations <- group_by(flights, dest)
+  summarise(destinations,
+    planes = n_distinct(tailnum),
+    flights = n()) #  others are first(x), last(x) and nth(x, n)
+  
+  ## functions of subsets
+  db2 <- db1 %>% group_by(DiveNum, Code) %>% 
+  summarise(heights = sum(Count[Code.3d == "Fish Height"], na.rm = T), 
+            lengths = sum(Count[Code.3d != "Fish Height" & !is.na(Code.3d)], na.rm = T), 
+            notmeas = sum(Number[is.na(Code.3d)], na.rm=T),
+            ttln = sum(Number))
+  
+  ## WHERE (more subsets)
+  pa <- group_by(tmp, Fish_common) %>% summarise(n_present = length(binmin[binsum >0]), n_absent = length(binmin[binsum==0]))
+  p2 <- melt(pa, id.vars= c("Location", "Fish_common"), variable.name = "Present")
+  
+  ## replacing NA with 0 after merge
+  db4 <- merge(db2, n.LH, by = c("DiveNum", "Code"), all=T) %>% 
+          mutate_at(vars(n.LH), funs(ifelse(is.na(n.LH), 0, n.LH))) 
+  # funs() is deprecated. Instead:
+          mutate_at(vars(n.LH), list(~ifelse(is.na(n.LH), 0, n.LH))) 
+  # better: mutate(LH = replace(LH, is.na(LH), 0)) %>%
+  # this works:
+          tmp3 %>% mutate_at(vars(HtComment, LengthComment, Pt3dComment, Pt2dComment), function(x) replace(x, is.na(x), ""))
+  
+  ## nesting code
+  x %>% f(y) # equiv to f(x,y) with commands listed heirarchically (instead of order of operation)
+  flights %>%
+    group_by(year, month, day) %>%
+    select(arr_delay, dep_delay) %>%
+    summarise(arr = mean(arr_delay, na.rm = TRUE), dep = mean(dep_delay, na.rm = TRUE)) %>%
+    filter(arr > 30 | dep > 30)
+  
+  starwars %>%
+      group_by(species) %>%
+      summarise(n = n(), mass = mean(mass, na.rm = TRUE)) %>%
+      filter(n > 1)
+
+  ## changing variable classes
+  s2 <- startstop %>% mutate_at(c("TranStart", "TranStop"), as.POSIXct, tz= "GMT")
+
+  ## vs the lapply way for multiple variables:  
+      tmp1[,c("UTM_X", "UTM_Y", "stepdist")] <- lapply(tmp1[,c("UTM_X", "UTM_Y", "stepdist")], function(x) sprintf("%.2f", x))
+      tmp1[,c("ROVheading", "ROVdepth")]  <- lapply(tmp1[,c("ROVheading", "ROVdepth")], function(x) sprintf("%05.1f", x))
+
+  ## find duplicates
+  qc1 %>% group_by(DateTimeGMT, Fish_spp, Fish_size, Sex) %>% filter(n()>1) %>% arrange(DateTimeGMT)
+
+  ## subsetting
+  qc <- rbind(qc1, qc2 %>% select(-Fishnotes)) # 15360
+
+  ## show N present and N missing  
+  tmp4 <- tmp3 %>% group_by(DiveTran) %>% 
+    select(DiveTran, DateTimeGMT, UTM_X, StatCode, Substr1, Fish_spp) %>%
+    summarise_all(funs(n=sum(!is.na(.)), n.NA = sum(is.na(.))))
+     (or...)
+     summarise_at(vars(viewscale, notes_viewscale), funs(n=n(), n.notNA=sum(!is.na(.)), n.NA = sum(is.na(.))))
+  
+  ## New syntax for funs()
+     summarise_at(iris, vars(starts_with("Sepal")), list(mean = mean, sd = sd), na.rm = TRUE)
+
+     
+  ## multi-step example of rename, lag, select, etc.
+p2 <- positions %>% group_by(DiveTran) %>% 
+        bind_cols(gpsdta2) %>%
+        select(DiveTran, DateTimeGMT, UTM_X = x.ma, UTM_Y = y.ma, ROVheading, ROVdepth) %>%
+        mutate(dx = UTM_X - dplyr::lag(UTM_X),
+               dy = UTM_Y - dplyr::lag(UTM_Y),
+               stepdist = sqrt(dx*dx + dy*dy)) %>%
+        filter(DateTimeGMT %in% OnTranSecs$DateTimeGMT) %>%
+        mutate(IDpos = seq(1:n()),
+               trandist = cumsum(stepdist)) %>%
+        select(-c(dx,dy))
+
+glimpse(positions) # rather than head()
+tst <- pdta1 %>% group_by(rawfile) %>% slice(1:1)  # get the first 4 records of each group
+
+# ntile- breaks into groups
+mutate(quad = ntile(DateTimeLocal, 4))
+
+# grepl- (where 'cats' is a vector of string matches)
+dta11 %>% filter(! grepl(paste(cats, collapse="|"), variable))
+      (OR...) grepl("END|End|end", tagcol)
+
+## conditional mutation-- must go from specific to general (evaluates in order!)
+x %>% mutate(myvar = case_when(
+  x %% 35 == 0 ~ "fizz buzz",
+  x %% 5 == 0 ~ "fizz",
+  x %% 7 == 0 ~ "buzz",
+  TRUE ~ as.character(x)
+)
+
+detach("package:dplyr", unload=TRUE)  # may be necessary b/c dplyr masks functions like 'rename' etc.
+if("dplyr" %in% (.packages())){detach("package:dplyr", unload=TRUE)} # even better; no error message
+
+## rownames
+iris %>% `rownames<-`(seq_len(nrow(iris))) # a weird base function 
+
+## 'pull'; to get a tibble column as a vector
+filter(intvls, TranNum %in% pull(filter(repeats, n_proc >1), TranNum))
+
+## conditional mutation: (only mutate certain rows based on their values)
+dta %>% mutate(FishHt = if_else(LengthLC %in% c("L4", "LBB", "LOW", "LUL"), 0, FishHt))
+
+mutate(n = replace(n, is.na(n), 0))
+
+## rowwise functions
+rowwise(tmp) %>% mutate(Min = min(x, y, z))
+
+## alternative/successor to reshape2
+group_by(Location, tran) %>% %>% tidyr::spread(yr, dens100) %>% ungroup %>% filter(complete.cases(.))
+# instead of cast:
+tidyr::pivot_wider(names_from = c(ROVstat, Fish_size2), values_from = n)
+
+## alternative to do.call(rbind, dfs)
+out <- bind_rows(lapply(dothese, function(x) { (ETC...)
+
+## combine  
+  mutate(dist.org = combine(lapply(orgn$TranNum, function(x) 
+    {as.numeric(st_distance(filter(orgn, TranNum==x), filter(rov.sf, TranNum==x)))})))
+  
+## count/tally (a simple shortcut to grouping and counting using n()...). E.g. finding duplicates:
+  df %>% add_count(t, u, v, w, x, y) %>% filter(n > 1)
+
+## 'where' as a tidyselect helper:
+iris %>% select(where(is.numeric))
+   ## usesd with a purrr formula, this can allow inline logic w/ multiple components:
+iris %>% select(where(~ is.numeric(.x) && mean(.x) > 3.5))
+  
+## recode (here, for a factor)
+tran.lctn2 <- mutate(tran.lctn, Location = recode(Location, "Island Rock" = "Humbug"))
+
+## across
+  iris %>% group_by(Species) %>%  summarise(across(starts_with("Sepal"), mean))
+  iris %>% as_tibble() %>% mutate(across(where(is.factor), as.character))  ## 'where' is a tidyselect helper
+  tmp1 <- po %>% mutate(across(`Blue_Deacon Rockfish`:`Spotted Ratfish`, ~ .x/area.ttl))
+
+## across- example with explicit variable list:  
+s2 <- group_by(s1, DiveTran) %>% 
+    mutate(across(c(UTM_X, UTM_Y, boatX, boatY, clumpX, clumpY), zoo::rollmean, k = 25, fill = "extend", .names= "{.col}.ma25"))
+## across- example with multiple vars and multiple functions using purrr formula; here, each function needs the .
+mutate(across(c(Substr1, Substr2), ~ recode(., "TS" = "V") %>% factor(., levels=codes))) 
+## drop unneeded factor levels for multiple variables (using across with purrr formula)
+mutate(viewarea.ng = TW.interp*stepdist, across(c(DiveTran, Fish_spp), ~ forcats::fct_drop(.)))
+
+## mutating joins (as opposed to 'merge'; join is faster, and it keeps rows in existing order)
+inner_join (default merge getting only matches; all.x=F and all.y=F)
+full_join (all = T) aka 'outer join'
+left_join (all.x=T and all.y=F) aka 'left outer join'
+right_join (all.x=F and all.y=T) aka 'right outer join'
+
+## filtering joins
+semi_join (return all rows from x where there are matching values in y, keeping just columns from x)
+anti_join (return all rows from x where there are not matching values in y, keeping just columns from x)
+
+  
+#################### programming functions in dplyr: https://dplyr.tidyverse.org/articles/programming.html
+
+  ## embracing data-variables:
+  my_summarise3 <- function(data, mean_var, sd_var) {
+      data %>% summarise(mean = mean({{ mean_var }}), sd = mean({{ sd_var }}))}
+  
+  ## ... and supplying names of variables for the output:
+  my_summarise5 <- function(data, mean_var, sd_var) {
+  data %>% summarise("mean_{{mean_var}}" := mean({{ mean_var }}), 
+      "sd_{{sd_var}}" := mean({{ sd_var }}) )}
+  
+  ##  and feeding any number of expressions:
+  my_summarise <- function(.data, ...) {
+  .data %>% group_by(...) %>% summarise(mass = mean(mass, na.rm = TRUE), height = mean(height, na.rm = TRUE))} 
+        ## note in this case, good practice to name everything else starting with a . to avoid argument clashes
+  
+  ## using across on user-supplied var:
+  my_summarise <- function(data, summary_vars) {
+  data %>% summarise(across({{ summary_vars }}, ~ mean(., na.rm = TRUE)))}
+  
+  ## across for multiple sets of input vars
+  my_summarise <- function(data, group_var, summarise_var) {
+  data %>% group_by(across({{ group_var }})) %>% summarise(across({{ summarise_var }}, mean, .names = "mean_{.col}"))}
+  
+## my function to add variable "DateTimeGMT" to df (from local date and UTC time).
+## If the survey ran past midnight GMT (5 PM PST), add 1 day to the PST date to create the GMT date. Otherwise GMT date = PST date. 
+fixvartime <- function(dset, var){
+  mutate(dset, Hr = as.integer(lapply(strsplit({{var}}, ":"), "[",1)),  
+               GMTDate = case_when(Hr < 10 ~ SurveyDate + 1, 
+                                   Hr > 10 ~ SurveyDate),    ## the 10 refers to 10 AM GMT (= 3 AM PST, a never-sampled in-between time)
+               "{{var}}" := as.POSIXct(paste(GMTDate, {{var}}), format="%Y-%m-%d %H:%M:%S", tz="GMT")) %>% select({{var}})}
+tmp2 <- mutate(tmp1, fixvartime(., TranStart), fixvartime(., TranEnd))
+
+## if_else (dplyr) retains classes, and allows assigning a value for NA. 'ifelse' (base) MAY CHANGE CLASSES; i.e. POSIXct to numeric
+
+
+## functions for ggplot: aes_string
+pltxy <- function(dset, x, y) {
+    smoplot <- ggplot(dset, aes_string(x, y)) + geom_line() + facet_wrap(~DiveTran, scales="free") 
+    ggsave(smoplot, file=paste0("SMO smoothed plots- further ", y, ".png"), width = 20, height = 20)
+}
+pltxy(s2, "UTM_X", "UTM_Y")
+
+## replacing NA
+replace_na(list(Invert_n = 0))  
+tmp %>% replace(is.na(.), 0) # replaces all NA in all columns
+
+## Leif tricks from tidyr
+complete(drop, ROVstat, fill=list(area=0)) # like expand.grid; fills missing combos with desired value
+## full example:
+rov.fsh <- filter(rov.inout, ROVstat == "NonGap_F", !is.na(Fish_spp)) %>% 
+  group_by(Location, TranNum, Fish_spp, schoolprox) %>%
+  summarize(ct = sum(Fish_n), .groups="drop") %>%
+  group_by(Location) %>%  # note TranNum should not be expanded across Locations
+  complete(TranNum, schoolprox, Fish_spp, fill=list(ct=0)) # here, Fish_spp is a factor and all levels are included
+
+fill(c(TranNum,Location,Area), .direction="downup") # like zoo::na.locf; fills missing in desired direction (can be within groups)
+
+## reshaping in tidyr: (replacement for reshape2)
+OSD1 <- OSD %>% group_by(Ldate, DiveNum) %>% tidyr::pivot_longer(cols=5:11, names_to = "var", values_to = "value")
+
+## replace NA; 'na_if' to turn character NA into missing
+fish.nav <- mutate(fish.nav, Fish_size = na_if(Fish_size, "NA"), Sex = na_if(Sex, "NA"))
+  # or maybe
+fish.nav <- mutate(fish.nav, across(c(Fish_size, Sex), na_if, "NA"))
+
+```
+
+# <a name="purrr"/>**purrr**    
+```{r eval=F}
+
+map(.x, .f, ...) makes a list. (The second argument, .f, the function to apply, can be a formula, a character vector, or an integer vector)
+map_lgl() makes a logical vector.
+map_int() makes an integer vector.
+map_dbl() makes a double vector.
+map_chr() makes a character vector.
+
+
+
+## the traditional 'for' loop example:
+output <- vector("double", ncol(df))  # 1. pre-allocate space in output
+for (i in seq_along(df)) {            # 2. sequence  (seq_along() is a safe version of 1:length(l), in case you have a zero-length vector)
+  output[[i]] <- median(df[[i]])      # 3. body
+}
+
+## the traditional loop for applying multiple functions to columns:
+col_summary <- function(df, fun) {
+  out <- vector("double", length(df))
+  for (i in seq_along(df)) {
+    out[i] <- fun(df[[i]])
+  }
+  out
+}
+col_summary(df, median)
+col_summary(df, mean)
+
+## now, the purrr way:
+df %>% map_dbl(median) # for numeric vectors
+
+# Note 1: The second argument, .f, the function to apply, can be a formula, a character vector, or an integer vector. 
+# Note 2: map_*() uses … ([dot dot dot]) to pass along additional arguments to .f each time it’s called:
+# Note 3: map_*() preserves column names in output
+
+## shortcuts: one-sided formulas [this uses split to create a named list of dataframes, instead of group_by to create a grouped dataframe]
+models <- mtcars %>%  split(.$cyl) %>% 
+  map(function(df) lm(mpg ~ wt, data = df))
+ becomes:
+  map(~lm(mpg ~ wt, data = .))
+
+## extract components from each element:
+models %>% map(summary) %>% map_dbl(~.$r.squared)
+  # or, last step has shortcut: map_dbl("r.squared")
+
+## using an integer to select elements by position:
+x <- list(list(1, 2, 3), list(4, 5, 6), list(7, 8, 9))
+x %>% map_dbl(2)
+#> [1] 2 5 8
+
+    ## Scott's examples using map and purrr formulas ~
+    tmp <- map(flist, read.csv, header=F)
+    
+    ## three ways to do the same thing:
+        tmp1 <- lapply(1:length(dts), function(x) {within(tmp[[x]], day <- dts[[x]])})
+        tmp1 <- seq_along(dts) %>% map(~mutate(tmp[[.]], day = dts[[.]]))
+        tmp1 <- map2(tmp, dts, ~ mutate(.x, day=.y)) 
+    
+    tw3 <- tw2 %>% split(.$DiveTran) %>% 
+           map(~data.frame(approx(tw$DateTimeGMT, tw$TranWidth.ma, xout = .$DateTimeGMT, rule = 2))) %>%
+           bind_rows()
+
+    tmp3b <- tmp3 %>% mutate(across(all_of(lithclasses), ~ ./ttlarea.nongap, .names = "{.col}_pct")) # lithclassess is an external vector with variable's names. 
+
+## imap and iwalk:
+# Note that when using the formula shortcut, the first argument
+# is the value, and the second is the position
+imap_chr(sample(10), ~ paste0(.y, ": ", .x))
+iwalk(mtcars, ~ cat(.y, ": ", median(.x), "\n", sep = ""))
+
+    ## applying piped functions across dataframes:
+    dtalist <- list("fish" = fish, "hab" = hab, "lasers" = lasers, "status" = status)
+    tmp <- imap(dtalist, ~merge(.x, select(transect_info, Location, DiveSeq, Transect_ID), by = "Transect_ID") %>% 
+                   mutate(dset = .y) %>% group_by(dset, Location, DiveSeq) %>% summarize(n=n())    )
+    tmp1 <- bind_rows(tmp) %>% arrange(Location, DiveSeq, dset) %>% select(Location, DiveSeq, dset, n) 
+    tmp2 <- pivot_wider(tmp1, names_from = dset, values_from = n)
+    
+
+## replacement for lapply with anonymous function:
+lapply(tclist, function(x) dir.create(paste0("data_out/qc/",x)))
+    becomes:
+map(tclist, ~ dir.create(paste0("data_out/qc/",.)))  
+        # the 2nd argument is .fn and it can be:
+            - a function e.g. mean (and ... is used to feed in arguments, separated by commas)
+            - a formula that can feed in arguments:
+                        - For a single argument function, use .
+                        - For a two argument function, use .x and .y
+                        - For more arguments, use ..1, ..2, ..3 etc
+            - a character or numeric vector or list (these become extractors)
+
+## dir.create example
+pth <- "D:/ROV_data_share/MR_synthesis_2021/Site_Summaries/_Rmd_scripts/ROV/Cascade_Head/inverts/plots/"
+map(c("Anemones", "Crustaceans", "Nudibranchs", "Ophiuroids", "Other", "Seastars", "Sponges", "Urchins"), ~ 
+      if_else(!dir.exists(paste0(pth,.)), dir.create(paste0(pth, .)), FALSE))
+
+## lapply() is basically identical to map(), except that map() is consistent with all the other functions in purrr, and you can use the shortcuts for .f.
+
+## test variable types:
+map_lgl(df, is.numeric)
+
+## safely
+safely() is an adverb: it takes a function (a verb) and returns a modified version. In this case, the modified function will never throw an error. Instead, it always returns a list with two elements:
+        result is the original result. If there was an error, this will be NULL.
+        error is an error object. If the operation was successful, this will be NULL.
+
+x <- list(1, 10, "a")
+y <- x %>% map(safely(log))
+str(y)
+# then use purrr::transpose() to group the results and the errors
+str(y %>% transpose())
+# also see possibly() and quietly()
+
+## map2, for operating along parallel elements of two lists
+mu <- list(5, 10, -3)
+sigma <- list(1, 5, 10)
+ # old way:
+seq_along(mu) %>% map(~rnorm(5, mu[[.]], sigma[[.]]))
+ # new way:
+map2(mu, sigma, rnorm, n = 5)
+  # Note that the arguments that vary for each call come before the function; arguments that are the same for every call come after.
+
+## pmap, for >2 arguments:
+n <- list(1, 3, 5)
+args1 <- list(n, mu, sigma)
+args1 %>%  pmap(rnorm)
+  # better to name each argument:
+args2 <- list(mean = mu, sd = sigma, n = n)
+args2 %>%  pmap(rnorm)
+
+## invoke_map for more complexe modeling, invoking different functions:
+f <- c("runif", "rnorm", "rpois")
+param <- list(list(min = -1, max = 1),   list(sd = 5),   list(lambda = 10))
+invoke_map(f, param, n = 5)
+
+## ... Or, organize the inputs in a tibble:
+        sim <- tribble(
+          ~f,      ~params,
+          "runif", list(min = -1, max = 1),
+          "rnorm", list(sd = 5),
+          "rpois", list(lambda = 10)
+        )
+        sim %>% mutate(sim = invoke_map(f, params, n = 10))
+        
+## pwalk, e.g. to save separate output files:        
+## walk(), walk2() and pwalk() all invisibly return .x, the first argument. This makes them suitable for use in the middle of pipelines.
+plots <- mtcars %>% split(.$cyl) %>% map(~ggplot(., aes(mpg, wt)) + geom_point())
+paths <- stringr::str_c(names(plots), ".pdf")
+pwalk(list(paths, plots), ggsave, path = tempdir())
+
+## example using map and split to plot dives using purrr formula (instead of lapply or loop):
+pdf("figures/substrate/substrate_map.pdf")
+dta1 %>% split(.$DiveTran) %>% head(3) %>%             # not sure why can't use [[1:3]] to subset the list without using head...
+  map( ~ ggplot(., aes(x=UTM_X, y=UTM_Y)) + geom_point(aes(color=Substr1), pch=15) + 
+         coord_cartesian(xlim=c(min(.$UTM_X)-30, min(.$UTM_X)+550)) + ggtitle(.$DiveTran) )
+dev.off()
+
+
+
+iris %>%  keep(is.factor) 
+iris %>% discard(is.factor) 
+some() and every() determine if the predicate is true for any or for all of the elements.
+detect() finds the first element where the predicate is true; detect_index() returns its position.
+x <- sample(10)
+x %>% detect(~ . > 5)
+x %>% detect_index(~ . > 5)
+head_while() and tail_while() take elements from the start or end of a vector while a predicate is true:
+x %>% head_while(~ . > 5)
+#> [1] 10  6
+x %>% tail_while(~ . > 5)    
+
+## see 'reduce': takes a “binary” function (i.e. a function with two primary inputs), and applies it repeatedly to a list until there is only a single element left.
+vs <- list(
+  c(1, 3, 5, 6, 10),
+  c(1, 2, 3, 7, 8, 10),
+  c(1, 2, 3, 4, 8, 9, 10)
+)
+vs %>% reduce(intersect) #> [1]  1  3 10
+
+## see 'accumulate': similar but it keeps all the interim results. You could use it to implement a cumulative sum:
+    x <- sample(10)   #>  [1]  7  5 10  9  8  3  1  4  2  6
+x %>% accumulate(`+`) #>  [1]  7 12 22 31 39 42 43 47 49 55
+
+
+```
+
+# <a name="Reshape, plyr"/>**reshape**    
+```{r eval=F}
+# USING RESHAPE2
+library(reshape2)
+tst <- melt(rings, id=c("region","diver","site"), measure.vars=c("veg","repro"))
+mssn <- melt(ssn, id.vars=c("gyr","ssn"))
+dta <- dcast(mssn, gyr + grp ~ param + ssn)
+
+## kelp greenling example:
+  kgttls <- ddply(kg, .(Site, DiveTran, Sex), summarize, ttl = sum(Count))
+  kgtrans <- dcast(kgttls, Site + DiveTran ~ Sex, sum, value.var="ttl")
+
+# library(plyr)
+(mn <- ddply(tst, .(region, variable), summarize, mn=mean(value), sd=sd(value))) # FOR A MELTED DATASET
+bay <- ddply(eachreg[-1], .(Year), colwise(sum))
+rbind.fill(data1_no_len,data2) # don't need same columns in both dataframes to rbind!
+```
+
+# <a name="plot"/>**Plotting**    
+```{r eval=F}
+# GGPLOT2
+qplot(region, value, data=tst, geom="boxplot", color=variable, 
+      ylab="Shoots/ring", main="2012 SB rings") + 
+      geom_jitter(position = position_jitter(width = .2))
+# qplot for adding custom lines:
+qplot(gyr, x, data=tmp, geom="line", color=sta, linetype = sta, main="SSN", ylab="RESP") +
+  facet_wrap(~ssn, ncol=1) + 
+	scale_linetype_manual(values = c(rep("dashed",3), rep("solid", 3)))
+
+## lapply for multi-parameter plots
+pdf("plots.pdf")
+lapply(levels(wq$PARAMETER), 
+		 function(x) qplot(DATE, VALUE, data=subset(wq, PARAMETER==x), geom="line", main=x) +
+		   				facet_wrap(facets=~STATION, ncol=3))
+dev.off()
+
+lapply(3:19, function(y) qplot(Year, sav[[y]], data=sav, geom="line", color=Region, 
+	main=names(sav)[[y]]) + scale_color_manual(values=c("black","blue","green","red")))
+
+## plotting all variables: use 'melt' first to create useful id field
+tmp <- melt(sav, id.vars=c("Region","Year"))
+qplot(Year, value, data=tmp, geom="line", color=Region) + scale_color_manual(values=c("black","blue","green","red")) + 
+  facet_wrap(~variable, ncol=4, scales="free_y")
+## colored path
+ggplot(tmp, aes(x=SECCHI,y=SAV, label=Year, color=Year)) + geom_text() + geom_path() +
+	scale_color_gradient(high="red",low="darkgreen")
+	# + theme(plot.background=element_blank(), text)
+## output: this is the same as 
+windows(9,5,12) ; p + mytheme ; ggsave("ggtest4.wmf"); graphics.off()
+win.metafile("file",9,5,12); p ; dev.off()
+
+## pie charts
+pie(tst$sm, labels=tst$Region)
+
+## example function for custom stripchart:
+plt <- function(x.offset, color, a) {
+    x.adj <- xs + x.offset
+    stripchart(sdl~trt, method="jitter", vert=T, at=x.adj, pch=16, col=color, add=a)
+    arrows(x.adj, xbar+1.96*sem, x.adj, xbar-1.96*sem, angle=90, code=3, length=.1)
+    points(x.adj, xbar, pch=4, cex=2)
+    }
+xs <- c(3,6,4,2,1,5)
+plt(-.15, "blue", F)
+plt(.15, "red", T)
+
+arrows(xs-.15, xbar+1.96*sem, xs-.15, xbar-1.96*sem, angle=90, code=3, length=.1) ## here xs is a vector of pre-specified x values
+
+## example stacked bar
+ggplot(tmp7, aes(bin, wt.perc, fill=Substr)) + geom_bar(stat="identity") + facet_wrap(~DiveTran, ncol=1) + 
+  scale_fill_manual(name="", values=colrs, drop=F)  + xlab("Distance along transect (m)") + ylab("") +
+  scale_y_continuous(breaks=NULL) + xlim(0,800) + guides(fill=guide_legend(ncol=2, reverse=T)) +
+  theme(panel.background=element_blank(), panel.grid=element_blank())
+
+## Suppress ticks and gridlines
+bp + scale_y_continuous(breaks=NULL)
+
+## line segments for paired data
+ggplot(kgttls, aes(x=Sex, y=ttl, group=DiveTran)) + ylim(0,20) + ylab("Count") + ggtitle("Kelp Greenling in ODFW ROV transects\n 2012 North Coast ") +
+  geom_line() + geom_point(shape=21, fill="white") + facet_wrap(~Site, ncol=4)
+
+## superscripts
+ylab(expression("Indiv. / 100 m"^2)) 
+ylab(expression(paste("Fish density (Indiv. / 100 m"^2, ") \u00B1 S.E."))) # put paste INSIDE expression! \u00B1 is the unicode +/- symbol
++ scale_size(name=expression("Density (100" ~ m^-2*")")) +
+
+## ggsave in a code chunk in .RMD
+p <- ggplot(etc. etc.)
+ggsave("data_out/figures/ etc.", width = 8, height = 6) # saves latest plot by default
+print(p) # for HTML print
+
+## wrapping long labels in ggplot
+## commas in number format
+## function for each spp
+library(stringr)
+library(scales)
+for (i in seq_along(topspp)){
+  plot <-
+    ggplot(subset(ipm2.all, ipm2.all$Fish_common==topspp[i]), aes(x=location, y=wt.mn*100, fill=location)) + 
+    geom_errorbar(aes(ymax = wt.mn*100 + wt.sd*100, ymin = wt.mn*100 - .05*wt.mn*100), position="dodge", width = .4) +
+    geom_bar(stat="identity", position="dodge", width = .5) + 
+    scale_fill_manual("", values = loc.colrs, drop = F) +
+    scale_x_discrete(name = "", labels = function(x) str_wrap(x, width = 10)) +
+    scale_y_continuous(labels = scales::comma) + 
+    ggtitle(paste("2016", topspp[i])) + xlab("") + ylab(expression("Individuals/100m"^2)) +
+    theme(legend.position = "none", text = element_text(size=15), axis.ticks.x=element_blank(), strip.text = element_text(size=16)) 
+  ggsave(plot, file=paste('data_out/Binning/20m consec/graphs/spp/20mc gen density by loc for ', topspp[i], ".png", sep=''),                  width=4, height=3.5)
+
+## complicated plot title: two lines (not auto wrap) AND expression AND a variable reference
+# bquote: see https://www.r-bloggers.com/2018/03/math-notation-for-r-plot-titles-expression-and-bquote/
+ggtitle(bquote(atop(.(spp.name), italic(.(as.character(pull(dtemp[1, "LatinName"])))))))
+ggtitle(bquote(atop(.(var1), italic(.(var2))))) # atop is evaluated as plotmath- makes 2 lines
+
+## small point sizes
+  geom_point(size=.05, stroke = 0) # update to ggplot changed the defaults, so the new value of stroke is too big for tiny points
+
+## datetime axis
+scale_x_datetime(date_breaks = "30 sec", date_minor_breaks = "10 sec", labels = date_format("%T", tz=""))
+
+## wrapping facet labels (there must be a space to wrap)
+facet_wrap(~var, scale="free_y", labeller = labeller(var = label_wrap_gen(10)))
+## save and retrieve it:
+mylab <- labeller(Fish_common = label_wrap_gen(6))
+facet_wrap(~var, scale="free_y", labeller = mylab))
+
+## wrapping axis labels in ggplot: manually define split using 'atop' (inside expression only)
+ylab(expression(atop("Mean density", paste("(Indiv. / 100 m"^2, ") \u00B1 C.I."))))
+
+## tweaking themes
+theme(get) # lists all kinds of hidden parameters
+theme(panel.spacing = unit(2, "lines")) # incr. spacing between facets
+
+## expression in renamed legend; square grid; consistent colors
+ggplot(tmp, aes(UTM_X, UTM_Y)) + geom_point(aes(size=dens100, color=yr)) + scale_size(name=expression("Density (100" ~ m^-2*")"))+
+    scale_color_manual(values = c( "#F8766D", "#00BA38" ,"#619CFF")) + # these are ggplot's default 3-color palette
+    scale_x_continuous(minor_breaks = seq(0,10000000,100), breaks = seq(0,10000000,1000)) + scale_y_continuous(minor_breaks = seq(0,10000000,100), breaks = seq(0,10000000,1000)) + 
+    theme(panel.grid.minor = element_line(size=.05, color = "gray80")) + coord_equal()
+
+## custom legend
+... + geom_line(data=osd.fltr, aes(x = DateTimeGMT, y = alt2.ma5, color="Alt_2")) + geom_line(data=osd.fltr, aes(x = DateTimeGMT, y = pitch.ma5, color="Pitch")) + 
+  geom_rect(aes(xmin=bad.start, xmax=bad.end, ymin=-10, ymax=10, fill="gray"), alpha=0.5) +
+  scale_color_manual(name="", values=c("Alt_2"="red", "Pitch"="blue")) + 
+  scale_fill_identity(name = '', guide = 'legend',labels = c('bad segments')) + theme(legend.position="top")
+
+## tricks here for ROV track maps: stroke, geom_segment, label format, text justification
+plt4 <- function(dset, i) {
+    nosecs <- filter(dset, second(DateTimeGMT)==0)
+    tranlims <- filter(dset, DateTimeGMT %in% c(times$start.DateTimeGMT, times$end.DateTimeGMT))
+    ggplot(dset, aes(UTM_X, UTM_Y)) + geom_path(size = .001, col="red") + geom_point(size=.05, stroke=0, col="red") + 
+        geom_path(aes(clumpX, clumpY), size = .001) + geom_point(aes(clumpX, clumpY), size=.05, stroke=0) +
+        geom_path(aes(boatX, boatY), col="blue", size = .001) + geom_point(aes(boatX, boatY), col="blue", size=.05, stroke=0) +
+        coord_equal() + sclx + scly + ggtitle(i) + 
+        # lines connecting ROV with clump and boat at each top of the minute 
+        geom_segment(data=nosecs, aes(x=UTM_X, y=UTM_Y, xend=clumpX, yend=clumpY), col = "gray30", lty=2, size=.05) + 
+        geom_segment(data=nosecs, aes(x=clumpX, y=clumpY, xend=boatX, yend=boatY), col = "gray80", lty=2, size=.05) + 
+        geom_text(data=nosecs, aes(x=UTM_X + 10, UTM_Y, label=format(DateTimeGMT, "%H:%M")), size=1) +
+        # start-stop points
+        geom_text(data= tranlims, aes(UTM_X + 5, UTM_Y + 5, label=format(DateTimeGMT, "%H:%M:%S")), size = 2, hjust = 0) +
+        geom_point(data=tranlims, size=1)
+}
+
+## rename legend
+p + labs(color="Custom legend title here")
+# Can also pass in a list, if that is more convenient
+p + labs(list(title = "Title", x = "X", y = "Y"))
+```
+
+## manual boxplot whiskers
+```{r eval=F}
+tmp <- group_by(bxdta, Location, species, zone) %>%
+  summarize(  y0 = min(dens100),
+              y25 = quantile(dens100, 0.25),
+              y50 = median(dens100),
+              y75 = quantile(dens100, 0.75),
+              y100 = max(dens100))
+
+ggplot(tmp, aes(x=zone, ymin = y0, lower = y25, middle = y50, upper = y75, ymax = y100)) + 
+      geom_boxplot(width=.5, stat = "identity") + 
+      facet_grid(species~Location, scales="free") + # this gives the same scale for each row (Species), but varies among spp
+      theme_bw() + theme(axis.text.x = element_text(angle=90, hjust = 1, vjust=.5)) 
+```
+
+
+# <a name="datetime"/>**datetime**       
+```{r eval=F}
+# DATES
+# WARNING: using as.Date (on a POSIXct object for example) will assume it's midnight GMT
+> as.POSIXct("2011-02-24")+95
+[1] "2011-02-24 00:01:35 EST"
+BUT:
+> as.POSIXct(as.Date("2011-02-24"))+95
+[1] "2011-02-23 19:01:35 EST"
+
+# getting time in a different time zone: 
+      ## [NOPE, better way below] vec <- transform(vec, datetime = as.POSIXlt(as.POSIXct(datetime, tz="EST"), tz="GMT"))
+attributes(m2b$DateTimeGMT)$tzone <- "GMT"
+
+# use round(as.POSIXct("2011-02-24 13:24:49"), "days") to get a point at midnight
+dt <- strptime(rawdata$SAMPLE_DATE, "%d%b%Y:%H:%M:%S")
+vfp$day <- as.Date(ISOdate(vfp$year, vfp$month, vfp$day))
+d$year <- as.POSIXlt(d$day)$year + 1900   # gets year from class Date
+
+difftime(as.Date("1985-10-25"),as.Date("2003-06-02"),units=c("days"))
+
+# check the timezone
+attr(L$dummytime[1], "tzone")
+
+
+```
+
+# <a name="input"/>**In 'n Out**
+
+## files / interaction
+```{r eval=FALSE}
+## file browser
+options(digits=3)
+stas <- scan("zone2stations.txt", what="character")
+datafilename <- file.choose()   # open file browser
+
+## renaming external files
+fls <- list.files()
+nms <- paste("DT", dive, "_", ftimes, ".jpg", sep="")
+file.rename(fls,nms)
+
+## user input function w/ error checking:
+getdive <- function(msg1) { 
+  n <- readline(prompt=msg1)
+  if(!nchar(n)==3 | grepl("[^0-9]", n)) {return(getdive(msg1))}
+  dive <<- n
+  return(as.numeric(n))
+}
+getdive("Enter Dive #: ")
+
+```
+
+## reading
+```{r eval=FALSE}
+
+## read Access database
+mychannel <- odbcConnectAccess("../Faunal samples 2010-2012.mdb")
+  modbugs <- sqlFetch(mychannel, "bugs")[-1]
+odbcClose(mychannel)
+
+## scanning in data lines
+tst <- scan(text="
+2006        1.76        0.11
+2007        2.22        0.11
+2008        1.59        0.11
+2009        1.89        0.11
+")
+tst2 <- as.data.frame(matrix(tst,ncol=3,byrow=T))
+names(tst2) <- scan(text="
+year     ann_inc         unc
+", what="")
+
+## read in a directory of CSV files
+pth <- "../4_VideoReview/Stereo/Sept2018_stereo/Exports/"
+din1 <- lapply(paste0(pth, dir(pth, pattern="3D")), read.csv, header=F, skip=4)
+
+## read in multiple tables, automatically assigning object names
+for (i in 85:106) {assign(paste("yr",i,sep="."), read.table(paste(i,"txt",sep="."), header=T))}
+files <- dir(pattern=".csv")
+flist <- dir(pattern=("PCT.*\\.txt$")) # regex that puts wildcard in between two search terms
+
+## read Excel files
+library(XLConnect) ## needs to be run in 32-bit R
+master <- readWorksheet(loadWorkbook("invert_compilation/Master_Invert_List_6-22-2015.xlsx"),sheet=1)
+## reading xlsx files:
+readxl::read_xlsx("D:/ROV_data_share/MR_synthesis_2021/Site_Summaries/_Data/ROV/MHP_inverts_list_master_9-15-21.xlsx", sheet = 2)
+
+## load and rbind saved R dataframes
+dsets <- c("ar15", "ar18", "biog", "ch12", "ch13", "ch17", "ch18", "cp15", "cp19", "hypox", "nc12", "rr10", "rr16", "rr18")
+lapply(paste0("indiv datasets out/", dsets),load, .GlobalEnv)
+dfs = sapply(.GlobalEnv, is.data.frame) 
+allpyc <- do.call(rbind, mget(names(dfs)[dfs]))
+
+```
+
+## writing
+```{r eval=FALSE}
+# dump a vector to file
+write(t,file="sdays.txt")
+secchis <- scan("sdays.txt")
+
+write(params[j],"WATCHING.txt",append=T)
+write.table(secc,"ssnd_secc.txt", quote=F, row.names=F)
+write.table(data.frame(d=a$days, vt=round(b$tmp,2))[1:100,],"myfile.txt",quote=F,row.names=F)
+
+## formatting output
+out <- transform(raw3, UTCtime = as.character(format(UTCtime, "%H:%M:%S")), 
+                 Long=sprintf("%.5f",Long.interp),
+                 Lat=sprintf("%.5f",Lat.interp))
+## leading zeroes (text)
+TransectNum = sprintf("%03.0f", TransectNum)
+
+## write fixed width format
+library(gdata)
+write.fwf(trantimes, file="data_out/all_nav_vars/usable transect summary fwf.txt", quote=F, width=c(10, 25, 25, 10, 10))
+# that doesn't align headers. Better:
+capture.output(print(trantimes, row.names=F, quote=F, right=F, print.gap=3), file="data_out/all_nav_vars/out.txt")
+
+# best (BUT DON'T INTERRUPT THE FUNCTION WITH THE NEXT LINE OF CODE; TRIES TO INCLUDE ANY RESULTS THAT ARE PRODUCED DURING THE WRITE)
+mywrite <- function(dset, fl) {
+  mp <- getOption('max.print')
+  options(max.print = nrow(dset) * ncol(dset), width = 1000)
+  capture.output(print(dset, row.names=T, quote=F, right=F, print.gap=3), file=fl)
+  options(max.print=mp)
+  }
+mywrite(nav.use, "data_out/all_nav_vars/usable nav data 3.txt")
+
+```
+
+# <a name="functions"/>**functions**  
+```{r eval=FALSE}
+## applying function over multiple levels; aggregating data frames 
+myfn <- function(sta, parm) {
+  t1 <- subset(rawdata, STATION==sta & PARAMETER==parm)
+	f <- approxfun(t1$date.n,t1$VALUE)
+   t <- f(days)
+	d <- data.frame(days, ival=t, sta=sta, param=parm)
+}   
+tmp <- lapply(params, function(parm) lapply(stas, function(sta) myfn(sta, parm))) # returns a list of 8 lists of 28 dataframes
+tmp2 <- do.call(rbind, tmp) # rbinds the 8 main lists, resulting in a list of 224 dataframes
+comb <- do.call(rbind, tmp2) # rbinds the 224 dataframes
+
+# functions
+f <- approxfun(csp$date.n,csp$value)
+days <- seq(as.Date("1984-06-27"),as.Date("2007-04-23"),by="1 day")
+val <- f(days)
+d <- data.frame(1:length(days))[,FALSE]
+
+## approx is really easy to fill in missing values:
+r3 <- mutate(bathy, d.interp = unlist(approx(IDpos, depth_m, xout=IDpos)[2])) 
+    # given a full list of IDpos with some missing 'depth_m' that are NA
+    # approx returns an x-y list; just grab the y values
+
+## function to compile CSV files
+compl <- function(pat1, pat2){
+  fls <- unlist(lapply(dir(pattern="201809"), function(x) paste0(x, "/", dir(x, pattern=pat1))))
+  dtalst <- lapply(fls, read.csv, header = T)
+  ## tag with CSV filename
+  dtalst <- lapply(1:length(dtalst), function(x) mutate(dtalst[[x]], TranNum = substr(lapply(strsplit(fls[[x]], pat2), "[", 2), 1,3)))
+  dta <<- do.call(rbind, dtalst)
+}
+
+```
+
+# <a name="stats"/>**stats**    
+```{r eval=FALSE}
+# regression results
+if (anova(reg.full)[1,5]>0.05) {sig.full="NS"} else sig.full=round(anova(reg.full)[1,5],3)
+mtext(paste(sig.full," (R^2=",round(summary(reg.full)$r.squared,2),")"), adj=0,cex=.6,col="blue")
+
+# correlation
+cor(for.correl$detect,for.correl$Length, use = "pairwise.complete.obs")
+```
+
+
+# <a name="multiplot"/>**multiplot function**  
+```{r eval=FALSE}
+###################### Multiple plot function from R cookbook:
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  require(grid);  plots <- c(list(...), plotlist); numPlots = length(plots)
+  if (is.null(layout)) {layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),ncol = cols, nrow = ceiling(numPlots/cols))  }
+  if (numPlots==1) {print(plots[[1]]) } else {
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    for (i in 1:numPlots) {
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row, layout.pos.col = matchidx$col)) 
+    }}}
+
+# verbose version of above:
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  require(grid)
+  # ggplot objects can be passed in ..., or to plotlist (as a list of ggplot objects)
+  # - cols:   Number of columns in layout
+  # - layout: A matrix specifying the layout. If present, 'cols' is ignored.
+  #
+  # If the layout is something like matrix(c(1,2,3,3), nrow=2, byrow=TRUE),
+  # then plot 1 will go in the upper left, 2 will go in the upper right, and
+  # 3 will go all the way across the bottom.
+  #
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+  
+  numPlots = length(plots)
+  
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                     ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+  
+  if (numPlots==1) {
+    print(plots[[1]])
+    
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+      
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
+
+## my application, using viewport positioning
+pdf("figures/fish/tst.pdf", width=15, height=15)
+lapply(1:32, function(k){
+  print(k)
+  grid.newpage()
+  vp1 <- viewport(name="vp1", width=.925, height=.5, x=0, y=1, just=c("left", "top"))
+  vp2 <- viewport(name="vp2", width=1, height=.2, x=0, y=.5, just=c("left", "top"))
+  vp3 <- viewport(name="vp3", width=1.005, height=.15, x=.005, y=.15, just=c("left", "bottom"))
+  vp4 <- viewport(name="vp4", width=.95, height=.15, x=0, y=0, just=c("left", "bottom"))
+  pushViewport(vpList(vp1, vp2, vp3, vp4))
+  plotlist <- list(fishbarplotlist[[k]], fishlineplotlist[[k]],  substr10stackbars[[k]], dpthplots[[k]])  
+  vps <- c("vp1", "vp2", "vp3", "vp4")
+  for(i in 1:4) {print(plotlist[[i]], vp=vps[i])}
+})
+dev.off()
+
+## ... or using grid layout
+w=14; h=16
+rws <- list(c(1:3), c(1:5), c(2:5), c(1:4))
+pdf("", width=w, height=h)
+for (k in 1:32){
+  grid.newpage()
+  pushViewport(viewport(layout = grid.layout(4, 5, widths=c(.02,.02,.85,.02, .09)*w, heights=c(.5,.2,.15,.15)*h)))
+  getplots(k)  
+  for (i in 1:4){print(tst[[i]], vp = viewport(layout.pos.row = i, layout.pos.col = rws[[i]]))}
+};dev.off()
+
+## create multi-panel ggplot figure
+library(grid)
+library(gridBase)
+p1 <- ggplot(dta, aes(binsum)) + geom_histogram() + facet_grid(hardsoft~Location)
+p2 <- ggplot(dta, aes(pred)) + geom_histogram() + facet_grid(hardsoft~Location)
+
+png("test panel.png", w=400, h=600)
+  par(mfrow=c(2,2))
+  ## plot.new() # puts the first plot in the first panel, instead of the last panel
+  plot.new(); vps <- baseViewports(); pushViewport(vps$figure)      
+  print(p1,vp = plotViewport(c(1,1,1,1)))  # margins
+  ## upViewport() # pulls out of the panel, back to the main plot space
+  upViewport(); plot.new(); vps <- baseViewports(); pushViewport(vps$figure) 
+  print(p2,vp = plotViewport(c(1,1,1,1)))  
+dev.off()
+
+
+```
+
+# <a name="char"/>**characters**    
+```{r eval=FALSE}
+## strsplit
+strsplit("This is a sentence with   x words", " +") # the + allows for one or more spaces
+
+i <- transform(i, Hr=as.integer(lapply(strsplit(i$timetext, ":"), "[",1))) # using strsplit rather than substr allows for 1- or 2-digit hour format in the raw data   
+# for getting the "187" out of var called "filename" (e.g. "514_187.txt")
+         Transect.file = as.character(lapply(strsplit(as.character(lapply(strsplit(filename,  "_"), "[",2)), "[.]"), "[", 1))
+
+## split character vectors
+split(substr(allbatches$windfilename, stpd, stpd+1), rep(1:nrow(allbatches), each=3))
+
+## create leading zeroes
+out <- within(out, {DiveNum = sprintf("%03.0f", DiveNum)})
+
+## substitutions
+names(mydata) <- gsub("\\.csv", "", myfiles)
+ OR
+names(mydata) <- stringr::str_replace(myfiles, pattern = ".csv", replacement = "")
+
+# use REGEXP to validate format of input date-time:
+!nchar(n)==19 | !grepl("\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d", n)
+
+
+```
+
+# <a name="md"/>**Markdown**    
+```{r eval=FALSE}
+
+## embedded image: no quotes on link
+![title]<../figures/this_figure.png>
+## A workaround for embedding images with spaces in path or file title: 
+![title]<img src = "../figures/this figure.png">
+
+## for a 'table' already produce in R:
+First save the table object (to access within knitr chunk)
+  tbl1 <- with(allsec2, table(Substr1, Substr2))
+  save(tbl1, file="data_out/substrate/SubstrFreqTable")
+then use kable: # (could use 'xtable')
+    #```{r kable, results="asis", echo=FALSE, warning=FALSE}
+    #library(knitr)
+    #load("..data_out/substrate/SubstrFreqTable")
+    #kable(tbl1, caption = "Title of the table")
+    #```
+  
+## kable (in knitr) for any dataframe:
+library(kableExtra)
+kable(d9) %>% kable_styling(full_width=F, position = "left")
+kable(db1) %>% kable_styling() %>% scroll_box(width = "100%", height = "200px")
+
+## DT (for datatables)
+## everything DT: go here https://rstudio.github.io/DT/
+
+## manual width set for datetime column; 
+# ```{r echo=F}
+load("../data_out/fish/fish")
+datatable(fish, rownames = FALSE, filter="top", width = "80%", options = list(pageLength = 15, scrollX=T, autoWidth = T,
+                 columnDefs = list(list(width = 130, targets = list(1)))))
+    ## minimum to have a wide scrolling table with specific wide columns for notes etc:
+    options = list(autoWidth = T, scrollX=T, columnDefs=list(list(width='500px', targets=7), list(width='200px', targets=6)))
+
+## full DT datatable example:
+    # - must have autoWidth=T to then set manual width
+    # - column indexing starts from 0 (rownames!) 
+    # - can specify class="compact", but it disables row lines and row highlighting on hover 
+# ```{r results='asis', echo=FALSE, warning=FALSE}
+load("../data_out/raw_data/sample segment header info")
+tmp <- segs2 %>% mutate_at(c("sel.start", "sel.end"), as.character) # only way I found to avoid DT weird local datetime formats/conversion
+datatable(tmp, width = '60%', filter = "top", rownames=F,
+                     extensions = c('Buttons', 'ColReorder', 'KeyTable', 'RowGroup'),
+                  options = list(buttons=c('excel', 'colvis'), colReorder=T, keys=T, rowGroup=list(dataSrc=c(0,1)),
+                                 autoWidth = T, pageLength = 15, stripeClasses=F, scrollY='500px',  paging=F, dom='frtipB',
+                                 columnDefs=list(list(width='400px', targets=5), list(width='300px', targets=6))))
+
+# ```
+
+## DT rounding format:  
+formatRound(datatable(sf3, ETC ETC, options(etc etc)), 5:8, digits=1)
+
+## embedding css (not CSS code block; just like this in RMD:)
+<style> 
+  div{background-color: rgba(255,  255, 255, 0.55);
+    padding: 15px;}
+  body{background-image: url('D593_SDpile4.jpg');
+    background-repeat: repeat;
+    background-size: 100%;
+    padding: 15px;}
+</style>
+
+## for widening the page content to better see wide tables. Use CSS code block in RMD:
+# ```{css, echo=FALSE}
+.main-container {max-width: 1800px;}
+# ```
+ 
+## to get the Excel button on the right instead of the left: (in CSS block)
+  .dataTables_wrapper .dt-buttons {
+  float:none;  
+  text-align:right;
+  }
+  
+
+## tabs
+On the heading for the tabbed section (with heading indicator, e.g. ##), follow text with: {.tabset .tabset-fade .tabset-pills}
+... then for each tab label use a lower-level heading indicator, e.g. ###, so like:
+## All sites figures: {.tabset}
+### Redfish
+### Orford
+
+## resizing local images. use setup chunk to call knitr:
+{r setup, echo=F, include=FALSE}
+library(knitr)
+  # then specify each figure:
+  {r  out.width = 500, echo=F}
+  include_graphics("../figures/fish/transects/transect ttl fish ct by area, across sites.png")
+
+## in setup chunk only, to size locally-produced plots in all code chunks (not those inserted by include_graphics)
+{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      fig.align = 'center', fig.asp = .4, fig.width = 6) # can do fig.width and fig.height, or these two. (or fig.dim = c(w,h) I think...)
+knitr::opts_knit$set(root.dir = 'D:/ROV_data_share/MR_synthesis_2021/Site_Summaries/_Rmd_scripts/ROV/Cascade_Head')
+
+
+## side-by-side figures (cannot figure out subheadings...)
+{r out.width = c("45%", "45%"), fig.show='hold', echo=F, fig.cap="This is a caption below the fig"}
+include_graphics("../figures/lasers/histogram of transect width WITH PITCH, normal obs.png")
+include_graphics("../figures/lasers/histogram of transect width WITH PITCH, 3-point moving average.png")
+
+## Captions:
+{r, fig.align="center", fig.width=6, fig.height=6, fig.cap="Figure: Here is a really important caption."}
+
+## Divs for side-by-side content placement:
+:::: {style="display: flex;"}
+::: {style="width: 50px;"}  
+:::  
+::: {}
+[ROV_status table](rawdata_ROVstatus.html)  
+[lasers table](rawdata_lasers.html)  
+:::
+::: {style="width: 100px;"}  
+:::  
+::: {}
+[ROV_status.txt](../data_out/raw_data/prelim/ROV_status.txt)  
+[laser_widths.txt](../data_out/raw_data/prelim/laser_widths.txt)  
+:::
+::::
+
+```
+
+
+# <a name="GIS"/>**Spatial / GIS**
+```{r eval=FALSE}
+# ## make shapefile for Arc
+# library(rgdal)
+# library(sp)
+# coordinates(tmp1)=~UTM_X+UTM_Y
+# proj4string(tmp1) <- CRS("+proj=utm +zone=10 ellps=WGS84")
+# raster::shapefile(tmp1, "data_out/GIS/all_ROV_surveys_pts.shp")
+
+## function to convert lat/long (WGS84) to UTM (NAD 83 UTM zone 10 N)
+library(sf)
+conv <- function(tmp, lon, lat){
+  st_as_sf(tmp, coords = c(lon, lat), crs = 4326) %>% # make spatial, using WGS84
+  st_transform(., crs = 26910) %>% # convert to NAD83 / UTM zone 10N
+  mutate(UTM_X = st_coordinates(.)[,1], UTM_Y = st_coordinates(.)[,2]) %>% # extract UTM coords
+  st_set_geometry(., NULL) # remove geometry
+}
+conv(dset, "Longitude", "Latitude")
+
+## find CRS
+st_crs(26910) # 
+st_crs(dta)
+
+## make dataframe spatial (an sf object) without dropping the columns showing the coordinates
+st_as_sf(btm, coords = c("UTM_X", "UTM_Y"), crs = 26910, remove=F)
+
+## get distances
+lapply(bins, function(i) {filter(tmp1, bin == i) %>% mutate(dst = st_distance(., filter(otherdta, bin==i))))
+
+## other sf
+st_crs(all2) <- st_crs(studybound)
+## intersection (the order matters! )
+tst <- st_intersection(all2, studybound)
+rov.donut25.30 <- st_intersection(nav.sf, donut25.30)
+st_read("RCA_box.shp")
+
+## create intervals along each selected line
+pts <- st_line_sample(thisline, density = 1)
+p1 <- st_sf(linenum = thisline$linenum, geom = pts) 
+p2 <- st_cast(p1, "POINT", warn=F)
+
+# make a line
+st_cast(p6, "LINESTRING") 
+
+# find line direction
+crd <- st_coordinates(p6)
+crdiff <- crd[2,] - crd[1,]
+theta <- atan2(crdiff[2], crdiff[1]) # line angle in radians
+
+# jitter lines
+linebase <- group_by(p6, linenum) %>% summarise() %>% st_cast("LINESTRING") 
+jtr <- runif(1, 0, 100)
+line7 <- st_sf(data.frame(linenum = linebase$linenum), geometry = st_sfc(st_geometry(linebase) + c(cos(theta + pi/2)*jtr, sin(theta + pi/2)*jtr)))
+
+(see Heceta 2019 prep scripts for more SF ideas)
+
+## distance between successive points    
+btm.sf <- st_as_sf(btm, coords = c("Longitude", "Latitude"), crs = 4326) %>% group_by(TranNum) %>%
+          mutate(dist=st_distance(geometry, lead(geometry, default = st_as_sfc("POINT(EMPTY)")), by_element = T)) %>%
+          mutate(dist = ifelse(is.na(dist), lag(dist), dist)) # fill in last (NA) ping dist. equal to prior ping dist
+
+## data.frame (points) to shapefile (lines) 
+all.sf <- st_as_sf(all, coords = c("UTM_X", "UTM_Y"), crs=32610)
+## subset and make lines
+all2 <- group_by(all.sf, survey, UTCdate, DiveTran) %>% arrange(DateTimeGMT) %>% slice(50*1:(n()/50)) # subsample every 50th point
+all3 <- summarise(all2, do_union = FALSE) %>% st_cast("LINESTRING") %>% ungroup # the do_union part prevents points from being connected in improper order(why?)
+st_write(all3, "T:/Biology/ROV/Data/sampling_effort/Transect_locations/GIS/all_MR_ROVpts_8-13-20b.shp", delete_layer=T)
+
+```
+
+
+## point extractions from polygons
+```{r eval=FALSE}
+library(sf); library(sp); library(raster)
+## get SGH v4.0
+V4 <- st_read("C:/localGIS/Seafloor_2/ClassifiedHabitat/SGH_V4_extra/V4_0_SGH_OREGON_EFHclass_shelf.shp") # 79,892 polygons
+## make spatial
+V4.spat.df <- as(V4, "Spatial") # makes SpatialPolygonsDataFrame- 309 MB
+## make random extraction points
+pts <- data.frame(Sample = 1:10, UTM_X = 388363 + 1000*runif(1:10), UTM_Y =4799882 + 1000*runif(1:10))
+pts1 <- st_as_sf(pts, coords = c("UTM_X", "UTM_Y"), crs = 32610)
+pts.spat.df <- as(pts1, "Spatial") # makes SpatialPointsDataFrame
+pts.extent <- st_bbox(pts.spat.df)
+## extract using sp (slow)
+sp::over(pts.spat.df, V4.spat.df) # returns df w/ attributes of containing polygons
+## extract using raster (fast)
+inter1=raster::intersect(pts.spat.df, V4.spat.df) # returns SpatialPointsDataFrame
+as.data.frame(inter1)
+```
+
+## convert coordinate formats
+```{r eval=FALSE}
+## convert lines to points and capture UTM coords
+d2 <- st_cast(d1, "POINT") %>% mutate(UTM_X = st_coordinates(.)[,1], UTM_Y = st_coordinates(.)[,2])
+## convert to lat-lon and capture coords
+d3 <- st_transform(d2, crs = 4326) %>% mutate(lon.dd = st_coordinates(.)[,1], lat.dd = st_coordinates(.)[,2])
+## functions to re-format coordinates from decimal degrees (dd) to degrees decimal minutes (ddm),
+##   ... and degrees minutes seconds (dms)
+mkddmlat <- function(x){paste(trunc(x), sprintf("%06.3f", (x-trunc(x))*60))}
+mkddmlon <- function(x){paste(trunc(x), sprintf("%06.3f", -(x-trunc(x))*60))}
+mkdmslat <- function(x){
+                mins <- (x-trunc(x))*60
+                paste0(trunc(x), " ", sprintf("%02.f", trunc(mins)), "\' ", sprintf("%04.1f", (mins-trunc(mins))*60), "\''")}
+mkdmslon <- function(x){
+                mins <- -(x-trunc(x))*60
+                paste0(trunc(x), " ", sprintf("%02.f", trunc(mins)), "\' ", sprintf("%04.1f", (mins-trunc(mins))*60), "\''")}
+
+d4 <- d3 %>%arrange(TranNum, lon.dd) %>%  
+      mutate(tranend = rep(c("W", "E"), 37), lat.ddm = mkddmlat(lat.dd), lon.ddm = mkddmlon(lon.dd),
+             lat.dms = mkdmslat(lat.dd), lon.dms = mkdmslon(lon.dd), 
+             lat.dd = sprintf("%9.5f", lat.dd), lon.dd = sprintf("%9.5f", lon.dd),
+             UTM_X = sprintf("%8.1f", UTM_X), UTM_Y= sprintf("%9.1f", UTM_Y)) %>%
+      st_set_geometry(., NULL) %>% select(TranNum, tranend, UTM_X, UTM_Y, lon.dd, lat.dd, lon.ddm, lat.ddm, lon.dms, lat.dms)
+```
+
+
+## background map
+```{r eval=FALSE}
+library(ggplot2)
+library(mapdata)
+ak <- subset(map_data('worldHires','USA:Alaska'), long<0) #drop the end of the Aleutian Islands, or use world2Hires 
+ggplot() + geom_polygon(data=ak, aes(long, lat, group=group), fill=8, color="black")
+
+
+```
+
+## point extractions / depth profile
+```{r eval=F}
+## convert transect endpoints to lines
+  d.lns <- st_as_sf(dta, coords = c("UTM_X", "UTM_Y"), crs = 32610) %>% group_by(Transect) %>% summarize() %>% st_cast("LINESTRING")
+## make 1-m points along transects
+  kept.pts <- st_line_sample(kept, sample = seq(0,1,.002)) # returns multipoint geometry w/ no transect names
+  kps <- st_sf(Transect = kept$Transect, geom = kept.pts) %>% st_cast("POINT") # make single point sf, labeled by transect
+## get depth raster
+  RRrast <- raster::raster("GIS/RFR_Hum_IslRk_bathy.tif") # this was manually exported (in Arc) to TIF format
+## Extract depth data. 'z' is at point; 'zmin' is minimum depth within 10m of point
+  extrz <- function(dta, x) {
+    data.frame(TranNum = x, TranPt = 0:tlength, z = raster::extract(crp, filter(dta, Transect==x)),
+               zmin = raster::extract(crp, filter(dta, Transect==x), buffer=10, fun=max)) }
+  zpts <- lapply(levels(kept$Transect), function(x) extrz(kps, x)) %>% do.call(rbind, .)
+
+```
+
+## terra
+```{r eval=F}
+library(terra)
+fullrast <- rast("M:/DATA_2/Field_Projects/ROV_Projects/SouthCoast/2022_SeaCalf/0_Planning/ROV_targeting/GIS/bathy/Ferrelo_Chetco_4m")
+
+see code in SouthCoast ROV 22 planning folder
+
+myrast <- fullrast
+myrast[myrast < -25] <- NA
+myrast[myrast > -10] <- NA
+
+## make boundary polygon (single multipolygon feature)
+mypoly <- as.polygons(myrast > -Inf)
+class(mypoly)
+
+## get extent polygon
+pe.myrast <- as.polygons(ext(myrast)) # same as original raster
+plot(mypoly, lwd=3, border='blue', add=TRUE)
+
+## write polygon shapefile
+writeVector(mypoly, "GIS/bathy/Ferrelo_Chetco_10-25_fullpoly.shp", overwrite=TRUE)
+
+## split and simplify polygon
+library(sf)
+library(tidyverse)
+mypoly.sf <- st_as_sf(mypoly)
+mypolys.sf <- st_cast(mypoly.sf, "POLYGON") # separate into multiple features
+
+## check and fix invalid polygon geometries
+any(is.na(st_dimension(mypolys.sf))) # F, so there are no empty geometries
+any(is.na(st_is_valid(mypolys.sf))) # F, so there are no corrupt geometries
+any(na.omit(st_is_valid(mypolys.sf)) == FALSE) # T, so there are invalid geometries
+#st_is_valid(mypolys.sf, reason = TRUE) # lists reasons
+mypolys.val <- st_make_valid(mypolys.sf) # has not lost any features
+#st_is_valid(mypolys.val, reason = TRUE)
+any(na.omit(st_is_valid(mypolys.val)) == FALSE) # F, so the invalid geometries were successfully fixed!
+
+## add calculated area field
+splitpolys <- mypolys.val %>% mutate(area = as.numeric(st_area(.)))
+
+## filter out tiny polygons and simplify
+polys.smpl <- filter(splitpolys, area > 400) %>% st_simplify(., dTolerance = 8)
+
+## write shapefile from sf
+st_write(polys.smpl, "GIS/bathy/Ferrelo_Chetco_10-25_polys_lg.shp", append = F)
+
+## add a version with 1 multipolygon feature, for cleaner editing in ArcGIS
+p2 <- st_union(polys.smpl) # yes, single feature
+
+## focal calculations (std dev of depth in a neighborhood to evaluate relief)
+tmp <- focal(fullrast, w=5, fun = sd)
+terra::writeRaster(tmp, "GIS/bathy/Ferrelo_Chetco_bumpyrast.tif", filetype = "GTiff", overwrite = TRUE)
+
+## filter to high relief only
+rk <- tmp; rk[rk < 0.27] <- NA # exclude lowest stdev areas (AKA sand)
+rkpoly <- as.polygons(rk > -Inf)
+writeVector(rkpoly, "GIS/bathy/Ferrelo_Chetco_10-25_rockmask.shp", overwrite=TRUE)
+
+The intersection of the 10-25 m depth zone and the rock footprint was done in Arc. See OneNote tips. Edited a copy of Ferrelo_Chetco_10-25_polys_lg.shp called "Ferrelo_Chetco_10-25_rk_edited.shp", pasted in the rock footprint feature, used Editor -> clip.
+
+# scatter 1000 points around.
+pts = st_sample(surveybnd, 200) %>% st_as_sf %>% mutate(ID_pt = 1:n())
+st_write(pts, "GIS/bathy/Ferrelo_Chetco_rndmpts.shp", append=F)
+
+
+## intersection of rock and 10-25m
+rkpolys <- st_as_sf(rkpoly) %>% st_cast("POLYGON")
+goodrock <- st_intersection(polys.smpl, rkpolys.val) # there may be issues- maybe why this intsection was done in Arc? see original script
+
+## get coordinates for cropping etc.
+click(myrast, n=4, xy=T, type="o")
+x <- c(314067, 299036, 435000, 400781); y <- c(4652000, 5093658, 5093658, 4652000) # pasted from output
+UTMs <- cbind(id=1, part=1, x, y)
+poly <- vect(UTMs, type="polygons", crs="+proj=utm +zone=10 +ellps=GRS80 +datum=NAD83 +units=m +no_defs") # this is the proj4 notation for epsg 26910, which is UTM 10N)
+plot(myrast)
+lines(poly)
+```
+
+# <a name="lubridate"/>**Lubridate**
+
+```{r eval=FALSE}
+
+## native class for just times? use package 'hms'
+today()
+now()
+
+## text parsers; 3 functions depending on order:
+ymd("2017-01-31")         # > [1] "2017-01-31"
+mdy("January 31st, 2017") # > [1] "2017-01-31"
+dmy("31-Jan-2017")        # > [1] "2017-01-31"
+ymd(20170131)             # same
+
+similarly, ms, hm, hms are lubridate functions (not sure why I need package 'hms'?)
+
+## create a date-time
+ymd_hms("2017-01-31 20:11:59")  # > [1] "2017-01-31 20:11:59 UTC"
+mdy_hm("01/31/2017 08:01")      # > [1] "2017-01-31 08:01:00 UTC"
+ymd(20170131, tz = "UTC")       # > [1] "2017-01-31 UTC"
+
+## from variables
+flights %>% select(year, month, day, hour, minute) %>% 
+  mutate(departure = make_datetime(year, month, day, hour, minute))
+
+## switch dates -- datetimes
+as_datetime(today()) # > [1] "2020-10-09 UTC"
+as_date(now())       # > [1] "2020-10-09"
+
+## accessor functions:
+year(), month(), mday() (day of the month), yday() (day of the year), 
+wday() (day of the week), hour(), minute(), and second()
+
+## display text vs number:
+month(datetime, label = TRUE) # > [1] Jul  #> 12 Levels: Jan < Feb < Mar < Apr < May < Jun < Jul < Aug < Sep < ... < Dec
+wday(datetime, label = TRUE, abbr = FALSE) #> [1] Friday #> 7 Levels: Sunday < Monday < Tuesday < Wednesday < Thursday
+
+## rounding
+floor_date(), round_date(), and ceiling_date()
+flights_dt %>% count(week = floor_date(dep_time, "week")) %>% ggplot(aes(week, n)) + geom_line()
+
+## setting components- use accessor fuctions above
+year(datetime) <- 2020
+hour(datetime) <- hour(datetime) + 1
+ # for multiple components at once, use 'update' (from pkg 'stats')
+update(datetime, year = 2020, month = 2, mday = 2, hour = 2)   # > [1] "2020-02-02 02:34:56 UTC"
+ # will roll over if too big:
+ymd("2015-02-01") %>% update(hour = 400)   # > [1] "2015-02-17 16:00:00 UTC"
+
+## example: examine patterns in smaller components by setting larger ones to a constant:
+flights_dt %>% mutate(dep_hour = update(dep_time, yday = 1)) %>% 
+  ggplot(aes(dep_hour)) + geom_freqpoly(binwidth = 300)  # shows hourly patterns by collapsing to 1 day
+
+## durations (avoids a variable-unit difftime object; always in seconds)
+today() - ymd(19791014) # Time difference of 15026 days # difftime has varying units
+as.duration(today() - ymd(19791014))   # > [1] "1293494400s (~40.99 years)" 
+## duration constructors:
+  dseconds(15) #> [1] "15s"
+  dminutes(10) #> [1] "600s (~10 minutes)"
+  dhours(c(12, 24)) #> [1] "43200s (~12 hours)" "86400s (~1 days)"
+  ddays(0:5) #> [1] "0s"  "86400s (~1 days)"  "172800s (~2 days)"  "259200s (~3 days)" "345600s (~4 days)" "432000s (~5 days)"
+  dweeks(3) #> [1] "1814400s (~3 weeks)"
+  dyears(1) #> [1] "31557600s (~1 years)"
+
+## periods (time spans in 'human times' not fixed length)  
+period(), years(), months(), weeks(), days(), hours(), minutes(), and seconds() 
+  months(1:2) # [1] "1m 0d 0H 0M 0S" "2m 0d 0H 0M 0S"
+  # arithmetic:
+  10 * (months(6) + days(1))          # > [1] "60m 10d 0H 0M 0S"
+  days(50) + hours(25) + minutes(2)   # > [1] "50d 25H 2M 0S"
+
+  # Daylight Savings Time
+  one_pm + ddays(1)  #> [1] "2016-03-13 14:00:00 EDT"
+  one_pm + days(1)   #> [1] "2016-03-13 13:00:00 EDT"
+
+## intervals (a duration with a starting point)
+next_year <- today() + years(1)
+(today() %--% next_year) / ddays(1)  # > [1] 365
+
+## time zones
+ # to change the display of an instant in time
+  (a <- Sys.time())    # "2020-12-03 17:08:34 PST"
+  with_tz(a, tzone = "America/New_York")   # "2020-12-03 20:08:34 EST"
+# to change the instant in time (e.g. data that was labeled incorrectly)
+  force_tz(a, tzone = "America/New_York")  # "2020-12-03 17:08:34 EST"
+
+## SRM method for making datetime UTC by combining UTC time and local date, accounting for DST. (Still assumes no data during the DST transition)
+d4 <- mutate(d4, dt1 = as_hms(V2), # stored as numeric seconds since midnight; has no tz; displayed as time of day
+                 dt2 = ymd_hms(paste(Ldate, dt1)), # POSIXct, defaults to UTC
+                 dt3 = with_tz(dt2, tz="America/Los_Angeles"), # makes the hour correct (accounting for DST 7 vs 8 hrs)
+                 dt4 = update(dt3, mday = as.numeric(substr(Ldate, 9,10))), # fixes the local date, retaining the local time
+                 dt5 = with_tz(dt4, "UTC"))
+## check DST
+dst("2013-10-26") # T
+dst("2013-11-24") # F
+
+## demo:
+ymd_hms("2013-10-26 00:00:00")
+with_tz(ymd_hms("2013-10-26 00:00:00"), "America/Los_Angeles") # UTC minus 7 hrs
+
+ymd_hms("2013-11-26 00:00:00")
+with_tz(ymd_hms("2013-11-26 00:00:00"), "America/Los_Angeles") # UTC minus 8 hrs
+
+## testing class
+lubridate::is.POSIXct()
+
+
+```
+
+
+# <a name="maps"/>**Maps**
+```{r eval=FALSE}
+
+## Leaflet- interactive maps
+tst <-   st_as_sf(drops.UTM, coords = c("UTM_X.drop", "UTM_Y.drop"), crs = 26910) %>% st_transform(., crs = 4326) # get to lat/long
+
+library(leaflet)
+m <- leaflet() %>% addTiles() %>%
+  addProviderTiles("Esri.WorldTopoMap", group = "Topo") %>%
+  addProviderTiles("Esri.WorldImagery", group = "ESRI Aerial") %>%
+  addCircleMarkers(data=tst, group="Area", radius = 4, opacity=1, fill = "darkblue",stroke=TRUE,
+                   fillOpacity = 0.75, weight=2, fillColor = "yellow",
+                   popup = paste0("Name: ", tst$Name, "<br> Area: ", tst$Area, "<br> TranNum: ", tst$TranNum)) %>%
+  addLayersControl(baseGroups = c("Topo","ESRI Aerial"), overlayGroups = c("test"), options = layersControlOptions(collapsed = T))
+
+library(htmlwidgets)
+saveWidget(m, file="test.html")
+
+```
+
+# Stats
+
+## GAM smooth plots- on density scale
+```{r eval = F}
+theme_set(theme_classic())
+thm <- theme(panel.border = element_rect(fill=F), strip.background =element_rect(fill="gray80"))
+mr_colors = c("#25408F", "#ABC7CA", "#519B9F", "#425563")
+cols <- scale_color_manual(values = mr_colors, guide = "none") 
+rib <- geom_ribbon(aes(ymin = ci.lwr, ymax = ci.upper), alpha=.2, lty=0) 
+
+model <- mgcv::gam(Count ~ Year  + Site + s(Depth, by = Site, k=3) + s(Hard.pct, by = Site, k=3), 
+                            data=dtemp, family=nb, offset=log(Area))
+
+pltdta <- voxel::plotGAM(model, "Depth", "Site")[[1]] %>%
+    mutate(dens100 = 100*exp(fit), ci.lwr = 100*exp(fit-1.96*se.fit), ci.upper = 100*exp(fit+1.96*se.fit))
+           
+ggplot(pltdta, aes(Depth, dens100, col=Site)) + geom_line(size=1) + rib + thm + cols + 
+    facet_wrap(~factor(Site, levels=c("Redfish Rocks MR", "Humbug CA", "Orford Reef CA")), ncol=3)
+
+```
+
+# <a name="else"/>**Everything else**    
+```{r eval=FALSE}
+## LAPPLY AND DO.CALL
+din <- lapply(2007:2012, function(x) read.delim(paste("Sept CBP downloads by year/",x," TNTPsecc.tsv", sep=""), sep="\t", header=T))
+raw <- do.call(rbind, din)
+
+## rbind details:
+"The rbind data frame method first drops all zero-column and zero-row arguments. (If that leaves none, it returns the first argument with columns otherwise a zero-column zero-row data frame.) It then takes the classes of the columns from the first data frame, and matches columns by name (rather than by position). Factors have their levels expanded as necessary (in the order of the levels of the levelsets of the factors encountered) and the result is an ordered factor if and only if all the components were ordered factors."
+
+## formulae- workaround using indices instead of variable names
+as.formula(paste(resp," ~ ",paste(names(rdta)[8:33], collapse="+")))
+
+# online resources
+random.org # source for TRUE random numbers
+RGoogleDocs package # GoogleDocs allows collaboration on spreadsheets. this allows R direct read
+
+# table to data.frame
+tmp <- table(usewind$Year)
+yrhrs <- data.frame(yr=as.integer(names(tmp)), yrhrs=tmp[])
+
+## making data frames
+v <- data.frame(1:length(days))[,FALSE]
+d <- data.frame(days, t=t$T.adj, ssn, mo, yr=yr+1900, gyr=yr-100)
+
+v$mean_t <- round(fillT(days),digits=2)
+b=merge(currst,v,by="day", all.x=T)
+d$sta <- eval(stas[i])
+
+## for resetting PAR values:
+op <- par(no.readonly = TRUE)
+par(op)
+
+message(paste("finished",params[j]))
+browser()
+
+# get variables in a list, or not in list
+TP <- TP[,!names(TP)%in% c("WVHT","DPD","APD","MWD","VIS","TIDE","mm")]
+gcorr <- grass[!grass$yrn %in% c(1988,1989),-6]
+
+# evaluate expression to reference a variable
+TP <- rbind(TP,get(paste("yr",i,sep=".")))
+
+# re-name variables
+names(T.stas)[3:4] <- c("day","T.sta")
+names(comp)[j] <- paste("Site",j,sep="_")
+df <- rename(df,c('foo'='samples')) # in package PLYR
+
+TP$x <- round(TP$x,2)
+
+# find duplicate rows
+tst <- as.data.frame(table(v1$day))
+dups <- tst[tst$Freq>1,]
+wqp.cs <- na.omit(wqp.cs)
+wqp.cs <- wqp.cs[order(wqp.cs$days),]
+alltemps1 <- merge(v1,alldays, by="day", all.y=T)
+
+mtext("Thomas Point;", adj=.1,col="red")
+lim <- seq(as.Date("1983/1/1"), as.Date("2010/1/1"), "4 years")
+  plot(x,y, type="o", xlim=c(lim[i],lim[i+1]), xaxt="n", xaxs="i")
+  axis.Date(1, at=seq(lim[i],lim[i+1], "years"))
+xaxt=if(a==14|a==28) {"s"} else {"n"}
+
+# TAPPLY
+xbar <- tapply(sdl, trt, mean) 
+cbbtdm <- aggregate(a,list(day=a$Date),mean, na.rm=T)
+
+# na.omit / complete.cases / unique
+dat[na.omit(dat$length),]
+complete.cases(dat) # returns a vector of true/falses
+dat_complete<- dat[complete.cases(dat),] # select rows with no NA values
+unique(mergedata$year)
+
+# sample
+data<- data.frame(year=sample(2009:2013, 8, replace=TRUE),
+                  month=sample(7:9, 8, replace=TRUE),
+                  weather=sample(letters[1:3],8,replace=TRUE))
+
+which.min(data2$len) # returns the row index of the minimum value of len
+
+## rank transects by each fish's density
+tst <- function(x) fsh[order(fsh[,x], decreasing=T), "Transect"]
+rnks <- data.frame(do.call(cbind, lapply(names(fsh), tst)))
+names(rnks) <- names(fsh)
+
+# extract useful columns of each list element
+worklist <- lapply(oklist, "[", ,c(1:3,10,11))
+
+## use WITHIN instead of TRANSFORM (does allow using new variables created inside within)
+#... but put the expression inside {brackets}, and don't separate lines by commas:
+i <- within(i, 
+        {Hr = as.integer(lapply(strsplit(UTCtime, ":"), "[",1))
+         Dive.edt =        as.integer(lapply(strsplit(edtstring, "_"), "[",1)) # parse the filename and edtstring into dive/transect
+         Dive.file =       as.integer(lapply(strsplit(filename,  "_"), "[",1))
+         Transect.edt =  as.character(lapply(strsplit(edtstring, "_"), "[",2))   
+         # for getting the "187" out of var called "filename" (e.g. "514_187.txt")
+         Transect.file = as.character(lapply(strsplit(as.character(lapply(strsplit(filename,  "_"), "[",2)), "[.]"), "[", 1))
+        })
+  
+  # use brackets EVEN if it's just one line:
+  i <- within(i, {Hr = as.integer(lapply(strsplit(UTCtime, ":"), "[",1))})
+
+## STOPIFNOT and WITH
+# within returns nothing if it does throw an error
+# within returns the dataframe if it doesn't throw an error
+# with returns nothing, error or no error
+with(tst, stopifnot(Transect.file == Transect.edt)) # proper syntax (don't put stopifnot in front)
+
+
+## stringsAsFactors. This applies to reading files, apparently also during variable creation in "transform", e.g.:
+options(stringsAsFactors=F)
+    transform(x, vidtime = Ltime, UTCtime = NA, Pitch = NA)) # without the option specified as F, vidtime would become a factor even if Ltime is character.
+
+# drop a column
+L <- L[,!(names(L)=="dummytime")] 
+fish.gap <- subset(tmp5, ROVstat == "Gap_F", select=-ROVstat) # or even just "subset(tmp5, select=-ROVstat)"
+
+# rename a variable
+names(all2)[names(all2)=="oldname"] <- "newname"
+# no, USE PLYR!
+raw$Label <- mapvalues(raw$Label, from = c("Dermasteria imbricata","Henricia spp.","Luidia foliolata"),
+                                  to = c("D_imbricata", "Henricia", "L_foliolata"))
+
+dta$Site <- revalue(dta$Site, c("Cannon Beach"="Cannon","Cape Kiwanda"="Kiwanda", 
+
+# apply function to list of dataframes, retaining dataframe names, without typing out the names:
+hdrlist = lapply(ls(pattern = "hdr\\."), get) # the \\ is needed to specify that the . is a character, not a wildcard
+names(hdrlist) <- ls(pattern = "hdr\\.")
+hdrlist2 <- lapply(hdrlist, function(x) subset(x, DiveTran != "550_214"))
+# get dataframes back out of a list                                
+list2env(hdrlist2, .GlobalEnv) # could define a new environment here, or just put the list objects back into the global env.
+
+
+# identify runs of values
+rle(x)
+# create a sequence of integers with run lengths determined by runs in another vector
+tmp$IDseg <- rep(1:length(rle(tmp$Substr1)[[2]]), rle(tmp$Substr1)[[1]])
+
+# rolling means, sums etc.
+library(zoo)
+sumXprev.k <- c(rep(NA,k), rollsum(dta[1:(nrow(dta)),"X"], k))
+
+# easy data tables: package data.table
+library(data.table)
+DT <- data.table(smo)
+setkey(DT, filename, FileName, LineName) # don't actually need this; can specify the column sort order in the next line
+DT[, .N, by="FileName"]  ## .N GIVES THE NUMBER OF ROWS
+write.csv(DT[, .N, by=c("filename","FileName","LineName")], "counts.csv", quote=F, row.names=F) ## EXPORT NICE NESTED FREQ TABLE
+
+## get combinations of SurveyDate + DiveTran that are present (with any number of observations) 
+dts <- ddply(fsh, .(SurveyDate), summarize, DiveTran = unique(DiveTran))
+
+## find any repeat seconds
+which(table(tmp2$DateTimeGMT) >1)
+all2 <- all[duplicated(all$DateTimeGMT)==F,]
+
+## table margins
+addmargins(table(gap.pos$DiveTran, gap.pos$StatCode))
+
+## find previous row that matches a criterion
+pos$Calf.row <- as.numeric(lapply(pos$trandist, function(x) max(which(pos$trandist<(x-setback)))+1)) ## use lapply on a column; it works down each row!!
+pos$UTM_Y.Calf <- as.numeric(lapply(1:nrow(pos), function(x) {y <- pos[x, "Calf.row"]
+                    pos[row.names(pos)==y, "UTM_Y.boat"]
+                    }))
+pos$UTM_X.Calf <- as.numeric(lapply(1:nrow(pos), function(x) {y <- pos[x, "Calf.row"]
+                    pos[row.names(pos)==y, "UTM_X.boat"]
+                    }))
+## record times
+sink(file="times.txt", append=T); Sys.time(); sink()
+
+## GOTCHAS
+length(unique(trantimes$DiveTran))
+length(unique(trantimes$Dive)) # if there is no 'Dive' column, this will return length(unique(trantimes$DiveTran)) b/c the 'Dive' is taken as a short name for 'DiveTran'
+
+library(Hmisc) # masks summarize in plyr - use summarise
+
+sprintf actually rounds... use plyr::round_any(.1234567, accuracy=.0001, f=floor)
+
+## contingency tables: (package stats)
+tbl <- xtabs(Freq ~ Gender + Admit, as.data.frame(UCBAdmissions))
+proportions(tbl, "Gender")
+
+## modify all dataframes (convert times to text) for writing to Access
+  dfs <- lapply(ls(), get)
+  names(dfs) <- ls()[ls()!="dfs"]
+  ## replace all POSIXct vars with character (necessary for ODBC to load in Access) # NEEDS LUBRIDATE
+  dfs2 <- lapply(dfs, function(x) x %>% mutate(across(where(is.POSIXct), as.character)))
+  list2env(dfs2, .GlobalEnv)
+
+## tidyr::uncount repeats rows a given number of times
+s4 <- s3 %>% tidyr::uncount(nrec) %>% group_by(DateTimeGMT) %>% mutate(repn = 1:n(), DateTimeGMT = DateTimeGMT+(repn-1)*4)
+
+## mget for making a named list of dataframes
+dfs <- mget(c("fish", "inverts", "lasers", "ROVstatus", "substrate"))
+ 
+## weighted variance - method of Cochran (1977)- see Gatz and Smith. Good substitute for the bootstrap, which is the best solution.
+weighted.var.se <- function(x, w, na.rm=FALSE) {
+  if (na.rm) { w <- w[i <- !is.na(x)]; x <- x[i] }
+  n = length(w)
+  xWbar = weighted.mean(x,w,na.rm=na.rm)
+  wbar = mean(w)
+  out = n/((n-1)*sum(w)^2)*(sum((w*x-wbar*xWbar)^2)-2*xWbar*sum((w-wbar)*(w*x-wbar*xWbar))+xWbar^2*sum((w-wbar)^2))
+  return(out)
+}
+# this function gives the SEMw squared, so take the sqrt
+# example:
+(d <- data.frame(x = c(20, rnorm(9, 10)), w=c(1, rep(1, 9))))
+d %>% summarize(mn = mean(x), sd = sd(x), se = sd/sqrt(length(x)),
+                mn.w = Hmisc::wtd.mean(x, w),
+                var.w = Hmisc::wtd.var(x, w),
+                sd.w = sqrt(var.w),
+                se.w = sd.w/sqrt(length(x)), # this one is just to demonstrate effect using full n (incorrect!)
+                SEMw = sqrt(weighted.var.se(x,w))) 
+```
+
+# **parallel processing**:
+- R only runs on one core unless somehow directed otherwise: 
+- [parallel processing](https://cran.r-project.org/web/views/HighPerformanceComputing.html)    
+- [S.O.](https://stackoverflow.com/questions/4775098/r-package-that-automatically-uses-several-cores)  

@@ -1,0 +1,14 @@
+
+
+.toc-content{
+  width: 100%;
+  background: DarkSteelBlue;
+}
+
+.tocify-item{
+  background: LightSteelBlue;
+}
+
+.sourceCode.r{
+  background: cornsilk;
+}
