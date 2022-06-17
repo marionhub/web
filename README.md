@@ -14,3 +14,8 @@ Google photos album links:
 |      | May |  June |     |     |
 |      |     |     |     |     |
 
+<style>
+  .footer {
+    display: none;
+  }
+</style>
