@@ -2,20 +2,25 @@
 ---
 
 @import "{{ site.theme }}";
+
 a {
   color: #0000ff;
 }
+
 a:hover {
   color: #000011;
 }
 
 footer {
     display: none;
-  }
+}
 
 table, td, th {
     border: 0px;
 }
 
-img[alt=mythumb] { width: 100px; box-shadow: 3px 8px 8px 5px rgba(0,0,0,0.2);}
-
+img[alt=mythumb] { 
+  width: 100px; 
+  box-shadow: 3px 8px 8px 5px rgba(0,0,0,0.2);
+  vertical-align: top;
+}

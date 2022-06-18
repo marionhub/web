@@ -2,7 +2,7 @@
 
 [R code reference](docs/SRM_code.html)
 
-[![Scott & Annie 2020](images/Scott%20n%20Annie%20thm.jpg){width="150 px"}](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5)
+[![Scott & Annie 2020](images/Scott%20n%20Annie%20thm.jpg){width=150 px;}](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5)
 
 Alex's Google photos albums:
 
