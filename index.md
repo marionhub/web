@@ -1,10 +1,10 @@
 ### Links
 
-[weather \n dashboard](docs/SRM_weather7.html)
+[weather\ dashboard](docs/SRM_weather7.html)
 
-[R code \n reference](docs/SRM_code.html)
+[R code\ reference](docs/SRM_code.html)
 
-Scott & Annie photo album:
+Scott & Annie\ photo album:
 
 |     |                                                                                                                    |     |
 |------------------------|------------------------|------------------------|
