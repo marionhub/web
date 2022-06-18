@@ -1,6 +1,8 @@
-[weather dashboard](docs/SRM_weather7.html)
+### Links
 
-[R code reference](docs/SRM_code.html)
+[weather \n dashboard](docs/SRM_weather7.html)
+
+[R code \n reference](docs/SRM_code.html)
 
 Scott & Annie photo album:
 
@@ -9,7 +11,7 @@ Scott & Annie photo album:
 |     | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |     |
 |     |                                                                                                                    |     |
 
-Alex's Google photos albums:
+### Alex's Google photos albums:
 
 ## 2020:
 
