@@ -1,11 +1,11 @@
-[weather dashboard](docs/SRM_weather7.html)
+[custom weather dashboard](docs/SRM_weather7.html)
 
-[R code reference](docs/SRM_code.html)
+[Scott's R code reference](docs/SRM_code.html)
 
-|                            |                                                                                                                    |     |
-|------------------------|------------------------|------------------------|
-| Scott & Annie photo album: | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |     |
-|                            |                                                                                                                    |     |
+|                            |                                                                                                                    |     |     |
+|--------------|------------------------|--------------|----------------------|
+| Scott & Annie photo album: | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |     |     |
+|                            |                                                                                                                    |     |     |
 
 ## Alex's Google photos albums:
 
@@ -24,7 +24,7 @@
 ## 2021:
 
 |                                                                                                                 |                                                                                                 |                                                                                                                         |                                                                                                 |
-|-----------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
+|------------------|------------------|--------------------|------------------|
 | Jan movies                                                                                                      | 3-4 mos                                                                                         | 8 mos                                                                                                                   | Walking!                                                                                        |
 | [![mythumb](images/Jan%20movies%20thm.jpg "Movies from Jan 2021")](https://photos.app.goo.gl/Li67ZVJuo2Hgy5Gn6) | [![mythumb](images/3-4%20mos%20thm.jpg "3-4 mos")](https://photos.app.goo.gl/snuXCZF9zKHdtegE9) | [![mythumb](images/pre-crawling%20thm.jpg "last of the pre-crawling era")](https://photos.app.goo.gl/a3Ltsy1xZ3wZJPWH9) | [![mythumb](images/walking%20thm.jpg "Walking!!")](https://photos.app.goo.gl/SK3Sv5So67rF2tHn7) |
 |                                                                                                                 |                                                                                                 |                                                                                                                         |                                                                                                 |
