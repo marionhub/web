@@ -9,9 +9,9 @@
 
 |                                             |                                                                                                                                   |     |     |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|-----|-----|
-| [weather dashboard](docs/SRM_weather7.html) | [![](assets/weather%20icon.png)](docs/SRM_weather7.html)                                                                          |     |     |
-| [R code reference](docs/SRM_code.html)      | [![](assets/code.png)](docs/SRM_code.html)                                                                                        |     |     |
-| Scott & Annie photo album                   | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020"){alt="mythumb"}](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |     |     |
+| weather dashboard | [![mythumb](assets/weather%20icon.png)](docs/SRM_weather7.html)                                                                          |     |     |
+| R code reference      | [![mythumb](assets/code.png)](docs/SRM_code.html)                                                                                        |     |     |
+| Scott & Annie photo album                   | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |     |     |
 
 ## Alex's Google photos albums:
 
