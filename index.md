@@ -4,13 +4,13 @@
 
 | weather dashboard | R code reference | Scott & Annie photo album  |
 |-----|-----|-----|
-| [![mythumb](assets/weather%20icon.png  "Weather dashboard")](docs/SRM_weather7.html)  | 
+| [![mythumb](assets/weather%20icon.png "Weather dashboard")](docs/SRM_weather7.html)  | 
 [![mythumb](assets/code.png "SRM code")](docs/SRM_code.html)    | 
-[![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")(https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5)    |
+[![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5)    |
 
 <br>
 
-## Alex's Google photos albums:
+## Alex's albums (Google photos):
 
 ## 2020:
 
