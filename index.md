@@ -4,9 +4,9 @@
 
 | weather dashboard | R code reference | Scott & Annie photo album  |
 |-----|-----|-----|
-| [![mythumb](assets/weather%20icon.png "Weather dashboard")](docs/SRM_weather7.html)  | 
-[![mythumb](assets/code.png "SRM code")](docs/SRM_code.html)    | 
-[![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5)    |
+| [![mythumb](assets/weather%20icon.png "Weather dashboard")](docs/SRM_weather7.html)|
+[![mythumb](assets/code.png "SRM code")](docs/SRM_code.html)|
+[![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5)|
 
 <br>
 
@@ -19,8 +19,9 @@
 | [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |   [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338)   | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) | 
 |   |   |   |
 |  Movies    | Thanksgiving visit | Christmas |   
-| [![mythumb](images/movies_thm.jpg "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) |
-[![mythumb](images/thanskgiving%20thm.jpg "Thanksgiving")](https://photos.app.goo.gl/9DxJhFJFUpnhJAe86)       | [![mythumb](images/christmas%20thm2.jpg "First Christmas")](https://photos.app.goo.gl/rDrpdgzfQ8Rj3SrD6) |
+| [![mythumb](images/movies_thm.jpg "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9)|
+[![mythumb](images/thanskgiving%20thm.jpg "Thanksgiving")](https://photos.app.goo.gl/9DxJhFJFUpnhJAe86)|
+[![mythumb](images/christmas%20thm2.jpg "First Christmas")](https://photos.app.goo.gl/rDrpdgzfQ8Rj3SrD6)|
 
 ## 2021:
 
