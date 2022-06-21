@@ -10,7 +10,7 @@ output:
 
     number_sections: yes
     highlight: tango
-    css: style.css
+    css: code_style.css
 ---
 
 <style>
@@ -22,8 +22,8 @@ div.main-container{
 
 div.tocify{
   left: 20px;
-  width: 350px;
-  max-width: 350px;
+  width: 250px;
+  max-width: 250px;
 }
 
 </style>
