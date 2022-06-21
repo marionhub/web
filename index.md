@@ -16,9 +16,9 @@
 
 | Alex's arrival |   At the hospital    | Coming home  | Movies    |
 |:-----------------:|:----------------:|:------------------:|:------------------:|
-| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |   [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338)   | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) | [![mythumb](images/movies%20thm.png "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) |
+| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |   [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338)   | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) | [![mythumb](images/movies_thm.jpg "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) |
 |   |   |   |   |
-| Thanksgiving | Christmas |    |    |   
+| Thanksgiving visit| Christmas |    |    |   
 | [![mythumb](images/thanskgiving%20thm.jpg "Thanksgiving")](https://photos.app.goo.gl/9DxJhFJFUpnhJAe86)       | [![mythumb](images/christmas%20thm2.jpg "First Christmas")](https://photos.app.goo.gl/rDrpdgzfQ8Rj3SrD6) |
 |
 |                                                              
@@ -26,7 +26,22 @@
 ## 2021:
 
 |------------------|-----------------|--------------------|-----------------|
-| Jan movies | 3-4 mos| 8 mos| Walking! |
+| Jan movies (2 mos.) | Feb-Mar (3-4 mos.)| June (8 mos.)| Nov: Walking! (12 mos.) | December (13 mos.) |
 | [![mythumb](images/Jan%20movies%20thm.jpg "Movies from Jan 2021")](https://photos.app.goo.gl/Li67ZVJuo2Hgy5Gn6) | [![mythumb](images/3-4%20mos%20thm.jpg "3-4 mos")](https://photos.app.goo.gl/snuXCZF9zKHdtegE9) | [![mythumb](images/pre-crawling%20thm.jpg "last of the pre-crawling era")](https://photos.app.goo.gl/a3Ltsy1xZ3wZJPWH9) | [![mythumb](images/walking%20thm.jpg "Walking!!")](https://photos.app.goo.gl/SK3Sv5So67rF2tHn7) |
+[![mythumb](images/snow%2021%20thm.jpg "Christmas etc.")](https://photos.app.goo.gl/AV1g4iXsNHVq6JyH9) |
 
-<br><br><br>
+
+
+<br>
+
+## 2022:
+
+| Feb. (15 mos.) | March (16 mos.)| April (17 mos.)| May (18 mos.) |
+| [![mythumb](images/Feb_22_thm.jpg "Feb 2022")](https://photos.app.goo.gl/CezHX9BcY8BuRn1M9) | 
+[![mythumb](images/March_22_thm.jpg "March 2022")](https://photos.app.goo.gl/Qw4DHUQhB8cQ34Qp9) |
+[![mythumb](images/Apr_22_thm.jpg "April 2022")](https://photos.app.goo.gl/6VsoFErA5ABAhpYe9) |
+[![mythumb](images/May_22_thm.jpg "May 2022")](https://photos.app.goo.gl/6VsoFErA5ABAhpYe9) |
+
+
+
+<br><br><br><br>
