@@ -2,7 +2,7 @@
 
 ## Scott's links:
 
-|weather dashboard | R code reference | Scott & Annie photo album  |
+| weather dashboard | R code reference | Scott & Annie photo album  |
 |-----|-----|-----|
 | [![mythumb](assets/weather%20icon.png)](docs/SRM_weather7.html)    | 
 [![mythumb](assets/code.png)](docs/SRM_code.html)    | 
@@ -16,8 +16,8 @@
 
 | Alex's arrival |   At the hospital    | Coming home  | Movies    |
 |:-----------------:|:----------------:|:------------------:|:------------------:|
-| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |   [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338)   | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) | [![mythumb](images/movies%20thm.png "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) | 
-
+| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |   [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338)   | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) | [![mythumb](images/movies%20thm.png "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) |
+|   |   |   |   |
 | Thanksgiving | Christmas |    |    |   
 | [![mythumb](images/thanskgiving%20thm.jpg "Thanksgiving")](https://photos.app.goo.gl/9DxJhFJFUpnhJAe86)       | [![mythumb](images/christmas%20thm2.jpg "First Christmas")](https://photos.app.goo.gl/rDrpdgzfQ8Rj3SrD6) |
 |
