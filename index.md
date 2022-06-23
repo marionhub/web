@@ -1,16 +1,18 @@
 <br>
 
-[thm1]: assets/weather%20icon.png
-[thm2]: assets/code.png
-[lnk3]: https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5
 
 ## Scott's links:
 
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
-| [![mythumb]([thm1])](docs/SRM_weather7.html) | [![mythumb]([thm2])](docs/SRM_code.html) | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](lnk3) |
+| [![mythumb]([thm1])](docs/SRM_weather7.html) | [![mythumb]([thm2])](docs/SRM_code.html) | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")]([lnk3]) |
 
 <br>
+
+[thm1]: assets/weather%20icon.png
+[thm2]: assets/code.png
+[lnk3]: https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5
+
 
 ## Alex's albums (Google photos):
 
