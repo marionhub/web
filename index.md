@@ -5,7 +5,7 @@
 
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
-| [![mythumb]([thm1])](docs/SRM_weather7.html) | [![mythumb]([thm2])](docs/SRM_code.html) | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")]([lnk3]) |
+| [![mythumb]([thm1])](docs/SRM_weather7.html) | [![mythumb]([thm2])](docs/SRM_code.html) | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")][lnk3] |
 
 <br>
 
@@ -16,7 +16,7 @@
 
 ## Alex's albums (Google photos):
 
-## 2020b:
+## 2020a:
 
 | Alex's arrival | At the hospital | Coming home |
 |:----------------------:|:---------------------:|:-----------------------:|
