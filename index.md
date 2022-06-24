@@ -1,5 +1,5 @@
 <br>
-
+x
 ## Scott's links:
 
 | weather dashboard | R code reference | Scott & Annie photo album |
@@ -14,9 +14,13 @@
 
 | 1 | 2 | 3 |
 |---|---|---|
-[![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
-[![mythumb](images/Apr_22_thm.JPG)](www.googlegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegoogle.com) | [![mythumb](images/Apr_22_thm.JPG)](www.googleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.com) | [![mythumb](images/Apr_22_thm.JPG)](www.googleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.com)
-
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com)
+|   |   |   |
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com)
 
 ## Alex's albums (Google photos):
 
@@ -24,10 +28,6 @@
 
 | Alex's arrival | At the hospital | Coming home |
 |:---:|:---:|:---:|
-| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) | [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338) | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) |
-|   |   |   |
-| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) | [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338) | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) |
-|   |   |   |
 | [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) | [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338) | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) |
 |   |   |   |
 | [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) | [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338) | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) |
