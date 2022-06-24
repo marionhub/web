@@ -9,7 +9,7 @@
 
 <br>
 
-[thm1]: {assets/weather%20icon.png}
+[thm1]: `assets/weather%20icon.png`
 [lnk1]: docs/SRM_weather7.html
 [thm2]: assets/code.png
 [lnk2]: docs/SRM_code.html
@@ -32,7 +32,7 @@
 | [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |
 [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |
 [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |
-|   |   |   |
+|       |        |       |  
 
 <br>
 |   |   |   |
