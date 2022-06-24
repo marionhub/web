@@ -5,7 +5,7 @@
 
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
-| [![mythumb]([thm1])][lnk1] | [![mythumb]([thm2])][lnk2] | [![mythumb]([thm3] "Scott & Annie 2020")][lnk3] |
+| [![mythumb]([thm1] "weather links")][lnk1] | [![mythumb]([thm2] "SRM R code")][lnk2] | [![mythumb]([thm3] "Scott & Annie 2020")][lnk3] |
 
 <br>
 
@@ -29,9 +29,9 @@
 |   |   |   |
 | [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) | [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338) | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) |
 |   |   |   |
-| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday"))](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) |
-[![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday"))](https://photos.app.goo.gl/9DxJhFJFUpnhJAe86) |
-[![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday"))](https://photos.app.goo.gl/rDrpdgzfQ8Rj3SrD6) |
+| [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday"))](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |
+[![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday"))](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |
+[![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday"))](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) |
 |   |   |   |
 
 <br>
