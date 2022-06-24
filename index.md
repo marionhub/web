@@ -1,6 +1,10 @@
 <br>
-x
+
 ## Scott's links:
+
+[lnk1]: docs/SRM_weather7.html
+[lnk2]: docs/SRM_code.html
+[lnk3]: https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5
 
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
@@ -8,16 +12,12 @@ x
 
 <br>
 
-[lnk1]: docs/SRM_weather7.html
-[lnk2]: docs/SRM_code.html
-[lnk3]: https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5
 
 | 1 | 2 | 3 |
 |---|---|---|
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
-|   |   |   |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
