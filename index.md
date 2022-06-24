@@ -38,6 +38,7 @@
 | Feb. (15 mos.) | March (16 mos.) | April (17 mos.) |
 |------------------------|------------------------|------------------------|
 | [![mythumb](images/Feb_22_thm.jpg "Feb 2022")](https://photos.app.goo.gl/CezHX9BcY8BuRn1M9) | [![mythumb](images/March_22_thm.jpg "March 2022")](https://photos.app.goo.gl/Qw4DHUQhB8cQ34Qp9) | [![mythumb](images/Apr_22_thm.jpg "April 2022")](https://photos.app.goo.gl/6VsoFErA5ABAhpYe9) |
+| | | |
 | May (18 mos.) |   |   |
 | [![mythumb](images/May_22_thm.jpg "May 2022")](https://photos.app.goo.gl/6VsoFErA5ABAhpYe9) |   |   |
 
