@@ -1,10 +1,10 @@
 <br>
-x
+a
 ## Scott's links:
 
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
-| [![mythumb]([assets/weather%20icon.png] "weather links")][lnk1] | [![mythumb]([assets/code.png] "SRM R code")][lnk2] | [![mythumb]([images/Scott%20n%20Annie%20thm.jpg] "Scott & Annie 2020")][lnk3] |
+| [![mythumb](assets/weather%20icon.png "weather links")][lnk1] | [![mythumb](assets/code.png "SRM R code")][lnk2] | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")][lnk3] |
 
 <br>
 
@@ -15,7 +15,7 @@ x
 | 1 | 2 | 3 |
 |---|---|---|
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
-[![mythumb](images/Apr_22_thm.JPG)](www.googlegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegoogle.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
+[![mythumb](images/Apr_22_thm.JPG)](www.googlegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegoogle.com) | [![mythumb](images/Apr_22_thm.JPG)](www.googleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.com) | [![mythumb](images/Apr_22_thm.JPG)](www.googleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee.com)
 
 
 ## Alex's albums (Google photos):
