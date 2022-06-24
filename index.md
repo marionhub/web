@@ -1,25 +1,21 @@
 <br>
-
-
+x
 ## Scott's links:
 
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
-| [![mythumb]([thm1] "weather links")][lnk1] | [![mythumb]([thm2] "SRM R code")][lnk2] | [![mythumb]([thm3] "Scott & Annie 2020")][lnk3] |
+| [![mythumb]([assets/weather%20icon.png] "weather links")][lnk1] | [![mythumb]([assets/code.png] "SRM R code")][lnk2] | [![mythumb]([images/Scott%20n%20Annie%20thm.jpg] "Scott & Annie 2020")][lnk3] |
 
 <br>
 
-[thm1]: `assets/weather%20icon.png`
 [lnk1]: docs/SRM_weather7.html
-[thm2]: assets/code.png
 [lnk2]: docs/SRM_code.html
-[thm3]: images/Scott%20n%20Annie%20thm.jpg
 [lnk3]: https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5
 
 | 1 | 2 | 3 |
 |---|---|---|
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
-[![mythumb](images/Apr_22_thm.JPG)](                                               www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
+[![mythumb](images/Apr_22_thm.JPG)](www.googlegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegooglegoogle.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
 
 
 ## Alex's albums (Google photos):
