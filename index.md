@@ -1,5 +1,5 @@
 <br>
-
+a
 ## Scott's links:
 
 [lnk1]: docs/SRM_weather7.html
@@ -14,7 +14,7 @@
 
 
 | 1 | 2 | 3 |
-|---|---|---|
+|:---:|:---:|:---:|
 |  [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
