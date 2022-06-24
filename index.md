@@ -19,7 +19,7 @@
 
 ## Alex's albums (Google photos):
 
-## 2020ac:
+## 2020:
 
 | Alex's arrival | At the hospital | Coming home |
 |:----------------------:|:---------------------:|:-----------------------:|
@@ -29,6 +29,7 @@
 | [![mythumb](images/movies_thm.jpg "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) |
 [![mythumb](images/thanskgiving%20thm.jpg "Thanksgiving")](https://photos.app.goo.gl/9DxJhFJFUpnhJAe86) |
 [![mythumb](images/christmas%20thm2.jpg "First Christmas")](https://photos.app.goo.gl/rDrpdgzfQ8Rj3SrD6) |
+|   |   |   |
 
 <br>
 |   |   |   |
