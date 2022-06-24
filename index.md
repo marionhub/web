@@ -2,16 +2,11 @@
 
 ## Scott's links:
 
-[lnk1]: docs/SRM_weather7.html
-[lnk2]: docs/SRM_code.html
-[lnk3]: https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5
-
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
-| [![mythumb](assets/weather%20icon.png "weather links")][lnk1] | [![mythumb](assets/code.png "SRM R code")][lnk2] | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")][lnk3] |
+| [![mythumb](assets/weather%20icon.png "weather links")](docs/SRM_weather7.html) | [![mythumb](assets/code.png "SRM R code")](docs/SRM_code.html) | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |
 
 <br>
-
 
 ## Alex's albums (Google photos):
 
@@ -33,8 +28,8 @@
 |------------------------|-----------------------|--------------------------|
 | [![mythumb](images/Jan%20movies%20thm.jpg "Movies from Jan 2021")](https://photos.app.goo.gl/Li67ZVJuo2Hgy5Gn6) | [![mythumb](images/3-4%20mos%20thm.jpg "3-4 mos")](https://photos.app.goo.gl/snuXCZF9zKHdtegE9) | [![mythumb](images/pre-crawling%20thm.jpg "last of the pre-crawling era")](https://photos.app.goo.gl/a3Ltsy1xZ3wZJPWH9) |
 | | | |
-| Nov: Walking! (12 mos.) | December (13 mos.) |   |
-| [![mythumb](images/walking%20thm.jpg "Walking!!")](https://photos.app.goo.gl/SK3Sv5So67rF2tHn7) | [![mythumb](images/snow_21_thm.jpg "Christmas etc.")](https://photos.app.goo.gl/AV1g4iXsNHVq6JyH9) |   |
+| Nov: Walking! (12 mos.) | December (13 mos.) |  x |
+| [![mythumb](images/walking%20thm.jpg "Walking!!")](https://photos.app.goo.gl/SK3Sv5So67rF2tHn7) | [![mythumb](images/snow_21_thm.jpg "Christmas etc.") ](https://photos.app.goo.gl/AV1g4iXsNHVq6JyH9) | z  |
 
 <br>
 
