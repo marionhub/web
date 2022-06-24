@@ -13,8 +13,8 @@ x
 <br>
 
 
-| 1 | 2 | 3 |
-|---|---|---|
+| 1 | 2 | 3 |  
+|---|---|---|  
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
 [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
