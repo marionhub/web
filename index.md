@@ -1,5 +1,5 @@
 <br>
-x
+
 ## Scott's links:
 
 [lnk1]: docs/SRM_weather7.html
@@ -15,7 +15,9 @@ x
 
 | 1 | 2 | 3 |
 |:---:|:---:|:---:|
-| [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |[![mythumb](images/Apr_22_thm.JPG)](www.google.com) |[![mythumb](images/Apr_22_thm.JPG)](www.google.com)
+| [![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com) |
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com)
 
 ## Alex's albums (Google photos):
 
