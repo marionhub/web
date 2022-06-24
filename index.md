@@ -1,7 +1,7 @@
 <br>
 
 
-## Scott's links:
+## Scott's linkses:
 
 | weather dashboard | R code reference | Scott & Annie photo album |
 |------------------------|------------------------|------------------------|
@@ -9,7 +9,7 @@
 
 <br>
 
-[thm1]: assets/weather%20icon.png
+[thm1]: "assets/weather%20icon.png"
 [lnk1]: docs/SRM_weather7.html
 [thm2]: assets/code.png
 [lnk2]: docs/SRM_code.html
