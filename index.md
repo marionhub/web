@@ -16,13 +16,18 @@
 [thm3]: images/Scott%20n%20Annie%20thm.jpg
 [lnk3]: https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5
 
+| 1 | 2 | 3 |
+|---|---|---|
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
+[![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com) | [![mythumb](images/Apr_22_thm.JPG)](www.google.com)
+
 
 ## Alex's albums (Google photos):
 
-## 2020:d
+## 2020:
 
 | Alex's arrival | At the hospital | Coming home |
-|:----------------------:|:---------------------:|:-----------------------:|
+|:---:|:---:|:---:|
 | [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) | [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338) | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) |
 |   |   |   |
 | [![mythumb](images/introducing-alex-galen-marion_thm.jpg "Birthday")](https://photos.app.goo.gl/UsbqoToZ5JBLwnLX9) | [![mythumb](images/hospital_thm.jpg "At the hospital")](https://photos.app.goo.gl/Msw5y5udBryZNi338) | [![mythumb](images/coming%20home%202%20thm.jpg "Coming home")](https://photos.app.goo.gl/KvWUrYm67uxNgAHp7) |
