@@ -6,7 +6,7 @@
 |------------------------|------------------------|------------------------|
 | [![mythumb](assets/weather%20icon.png "weather links")](docs/SRM_weather7.html) | [![mythumb](assets/code.png "Scott's R code quick reference")](docs/SRM_code.html) | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |
 
-<br>
+<br><br>
 
 ## Alex's albums (on Google Photos):
 
@@ -18,9 +18,8 @@
 |   |   |   |
 |Movies | Thanksgiving visit | Christmas |
 | [![mythumb](images/movies_thm.jpg "Movies")](https://photos.app.goo.gl/4mnHxyz3WaqjsbZn9) | [![mythumb](images/thanskgiving%20thm.jpg "Thanksgiving")](https://photos.app.goo.gl/9DxJhFJFUpnhJAe86) | [![mythumb](images/christmas%20thm2.jpg "First Christmas")](https://photos.app.goo.gl/rDrpdgzfQ8Rj3SrD6) |
-|       |        |       |  
 
-<br>
+<br><br>
 
 ## 2021:
 
@@ -31,7 +30,7 @@
 | Nov: Walking! (12 mos.) | December (13 mos.) |  |
 | [![mythumb](images/walking%20thm.jpg "Walking!!")](https://photos.app.goo.gl/SK3Sv5So67rF2tHn7) | [![mythumb](images/snow_21_thm.JPG "Christmas etc.") ](https://photos.app.goo.gl/AV1g4iXsNHVq6JyH9) |  |
 
-<br>
+<br><br>
 
 ## 2022:
 
@@ -41,6 +40,5 @@
 | | | |
 | May (18 mos.) |   |   |
 | [![mythumb](images/May_22_thm.JPG "May 2022")](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) |   |   |
-
 
 <br><br><br><br>
