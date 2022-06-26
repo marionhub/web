@@ -23,7 +23,7 @@
 
 ## 2021
 
-| Jan movies (2 mos.)| Feb-Mar (3-4 mos.) | June (8 mos.)  |
+| Jan movies <br> (2 mos.)| Feb-Mar <br> (3-4 mos.) | June <br> (8 mos.)  |
 |------------------------|-----------------------|--------------------------|
 | [![mythumb](images/Jan%20movies%20thm.jpg "Movies from Jan 2021")](https://photos.app.goo.gl/Li67ZVJuo2Hgy5Gn6) | [![mythumb](images/3-4%20mos%20thm.jpg "3-4 mos")](https://photos.app.goo.gl/snuXCZF9zKHdtegE9) | [![mythumb](images/pre-crawling%20thm.jpg "last of the pre-crawling era")](https://photos.app.goo.gl/a3Ltsy1xZ3wZJPWH9) |
 | | | |
