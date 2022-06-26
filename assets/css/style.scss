@@ -21,15 +21,13 @@ table, td, th {
 }
 
 img[alt=mythumb] { 
-  height: 100px; 
+  width: 150px; 
   box-shadow: 3px 8px 8px 5px rgba(0,0,0,0.2);
   vertical-align: middle;
 }
 
 img[alt=mythumb]:hover { 
-  width: 120px; 
-  box-shadow: 3px 8px 8px 5px rgba(0,0,0,0.2);
-  vertical-align: middle;
+  box-shadow: 3px 8px 8px 20px rgba(0,0,0,0.5);
 }
 
 #downloads {
@@ -41,5 +39,6 @@ header h1 {
 }
 
 header { 
-  height: 90px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
