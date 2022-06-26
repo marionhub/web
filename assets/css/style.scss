@@ -21,7 +21,7 @@ table, td, th {
 }
 
 img[alt=mythumb] { 
-  width: 100px; 
+  height: 100px; 
   box-shadow: 3px 8px 8px 5px rgba(0,0,0,0.2);
   vertical-align: middle;
 }
@@ -38,4 +38,8 @@ img[alt=mythumb]:hover {
 
 header h1 {
   font-size: 48px; font-weight: 600;
+}
+
+header { 
+  height: 90px;
 }
