@@ -18,6 +18,10 @@ table, td, th {
     border: 0px;
 }
 
+th {
+  padding-bottom: 10px;
+}
+
 img[alt=mythumb] { 
   width: 150px; 
   box-shadow: 3px 8px 8px 5px rgba(0,0,0,0.2);
