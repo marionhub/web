@@ -2,9 +2,12 @@
 
 ## Scott's links
 
-| weather dashboard | R code reference | Scott & Annie photo album |
-|:---:|:---:|:---:|
-| [![mythumb](assets/weather%20icon.png "weather links")](docs/SRM_weather7.html) | [![mythumb](assets/code.png "Scott's R code quick reference")](docs/SRM_code.html) | [![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) |
+| weather dashboard | R code reference |
+|:---:|:---:|
+| [![mythumb](assets/weather%20icon.png "weather links")](docs/SRM_weather7.html) | [![mythumb](assets/code.png "Scott's R code quick reference")](docs/SRM_code.html) | 
+|   |   |
+| Scott & Annie photo album | Hawaii 2022 |
+|[![mythumb](images/Scott%20n%20Annie%20thm.jpg "Scott & Annie 2020")](https://photos.app.goo.gl/Lyh4CcWdFuuiufuv5) | [![mythumb](images/Hawaii_thm.JPG "Hawaii 2022")](https://photos.app.goo.gl/fkz3FdM8WAb3SHdq9) |
 
 <br>
 ---
