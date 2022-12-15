@@ -43,11 +43,7 @@
 |------------------------|------------------------|------------------------|
 | [![mythumb](images/Feb_22_thm.jpg "Feb 2022")](https://photos.app.goo.gl/CezHX9BcY8BuRn1M9) | [![mythumb](images/March_22_thm.JPG "March 2022")](https://photos.app.goo.gl/Qw4DHUQhB8cQ34Qp9) | [![mythumb](images/Apr_22_thm.JPG "April 2022")](https://photos.app.goo.gl/6VsoFErA5ABAhpYe9) |
 | | | |
-| May <br> (18 mos.) | June <br> (19 mos.) | July <br> (20 mos.) |
+| May <br> (18 mos.) | 
 | [![mythumb](images/May_22_thm.JPG "May 2022")](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) |
-| [![mythumb](images/June_22_thm.JPG "June 2022")](https://photos.app.goo.gl/5ZX6Aqa4kusMXZQK9) |
-| [![mythumb](images/July_22_thm.JPG "July 2022")](https://photos.app.goo.gl/dpVrwNgzGyVFR2mM8) |
 
 <br><br><br><br>
-
-
