@@ -45,6 +45,13 @@
 | | | |
 | May <br> (18 mos.) | June <br> (19 mos.) | July <br> (20 mos.) |
 | [![mythumb](images/May_22_thm.JPG "May 2022")](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) | [![mythumb](images/June_22_thm.JPG "June 2022")](https://photos.app.goo.gl/5ZX6Aqa4kusMXZQK9) | [![mythumb](images/July_22_thm.JPG "July 2022")](https://photos.app.goo.gl/dpVrwNgzGyVFR2mM8) |
+| | | |
+| Aug. <br> (21 mos.) | Sept. <br> (22 mos.) | Oct. <br> (23 mos.) |
+| [![mythumb](images/May_22_thm.JPG "August 2022")](https://photos.app.goo.gl/ru4sv9hsiUfS3ew47) | [![mythumb](images/June_22_thm.JPG "September 2022")](https://photos.app.goo.gl/5ZX6Aqa4kusMXZQK9) | [![mythumb](images/July_22_thm.JPG "October 2022")](https://photos.app.goo.gl/dpVrwNgzGyVFR2mM8) |
+| | | |
+| Nov. <br> (24 mos.) | Dec. <br> (25 mos.) | Christmas in NY. <br> |
+| [![mythumb](images/May_22_thm.JPG "November 2022")](https://photos.app.goo.gl/61gsp6bFL7WbjCuw7) | [![mythumb](images/June_22_thm.JPG "December 2022")](https://photos.app.goo.gl/dfUobZyAygbBRM4Z9) | [![mythumb](images/July_22_thm.JPG "Christmas 2022")](https://photos.app.goo.gl/yiQ3qWF3FtJeMJqV9) |
+
 
 <br><br><br><br>
 
